@@ -1,48 +1,62 @@
 import numpy as np
-from src.y_operator.params import OM, xi2, tau, HBAR, M, delta, p0z, Z_ast
-from src.y_operator.params import A_INT_CONSTANT, V_INT_CONSTANT, W_INT_CONSTANT
+from src.y_operator.params import get_params
+from src.y_operator.params import xi2, HBAR, M, p0z, Z_ast
+from src.y_operator.params import z_ij_matrix, DELTA_a, DELTA_b, DELTA_r
+from src.y_operator.params import W_INT_CONSTANT
+from src.y_operator.params import OM_small
 
 
-def get_xi(t):
+def get_xi(t, om):
+    tau, _ = get_params(om)
     if t <= tau:
         return 0.0
     else:
         return xi2
 
 
-def get_OM_eff(t):
-    om_eff = np.sqrt(2 * OM ** 2 + delta ** 2)  # TODO: this is from presentation and should be checked
-    return om_eff * np.exp(1j * get_xi(t))
+def get_OM_eff(t, om):
+    _, delta = get_params(om)
+    om_eff = np.sqrt(2 * om ** 2 + delta ** 2)
+    return om_eff * np.exp(1j * get_xi(t, om))
 
 
-def get_A(t):
-    const_A01 = get_OM_eff(t) / 2 * A_INT_CONSTANT
-    A_matrix = np.zeros((3, 3), dtype=complex)
-    A_matrix[2, 1] = const_A01
-    A_matrix[1, 2] = A_matrix[2, 1].conj()
-    A_matrix[2, 2] = delta * A_INT_CONSTANT
-    return A_matrix
+# Constructing both parts of V_matrix
+const_V1_spin = - 1.0 / HBAR / 2.0 / M
+const_V1_vib = HBAR * OM_small * M / 2
+const_V1 = const_V1_vib * const_V1_spin
+V_matrix1 = np.eye(3, dtype=complex) * const_V1
 
 
-# Also V_matrix does not depend on time, it is still convinient to use method for it
-def get_V1(t):
-    const_V1 = - 1.0 / HBAR / 2.0 / M * V_INT_CONSTANT
-    V_matrix1 = np.zeros((3, 3), dtype=complex)
-    V_matrix1[0, 0] = const_V1  # p^2 / 2m, applied to state |a>
-    V_matrix1[1, 1] = const_V1
+def get_V1(t, om):
     return V_matrix1
 
 
-def get_V2(t):
-    const_V2 = - 1.0 / HBAR / 2.0 / M * V_INT_CONSTANT
-    V_matrix2 = np.zeros((3, 3), dtype=complex)
-    V_matrix2[2, 2] = const_V2
+const_V2_spin = - 1.0 / HBAR / 2.0 / M
+const_V2_vib = p0z ** 2  # characteristic value of momentum, V2_vib is normalized by this value
+const_V2 = const_V1_spin * const_V2_vib
+V_matrix2 = np.zeros((3, 3), dtype=complex)
+V_matrix2[2, 2] = const_V2
+
+
+def get_V2(t, om):
     return V_matrix2
 
 
-def get_W0z(t):
-    const_w0z = W_INT_CONSTANT * 1j * get_OM_eff(t) * HBAR / Z_ast / p0z  # TODO: check, whether HBAR should be here
+def get_W0z(t, om):
+    const_w0z = W_INT_CONSTANT * get_OM_eff(t, om).conj() * 1j * HBAR / Z_ast / p0z
     W0z_matrix = np.zeros((3, 3), dtype=complex)
     W0z_matrix[1, 2] = const_w0z
-    W0z_matrix[2, 1] = W0z_matrix[0, 1].conj()
+    W0z_matrix[2, 1] = const_w0z.conj()
     return W0z_matrix
+
+
+def get_Wz(t, om):
+    const_wz = W_INT_CONSTANT * (HBAR ** 2) / (p0z ** 2)
+    Wz_matrix = np.zeros((3, 3), dtype=complex)
+    Wz_matrix[0, 0] = -DELTA_a
+    Wz_matrix[1, 1] = -DELTA_b
+    Wz_matrix[1, 2] = get_OM_eff(t, om).conj() / 2
+    Wz_matrix[2, 1] = get_OM_eff(t, om) / 2
+    Wz_matrix[2, 2] = -DELTA_r
+    return const_wz * z_ij_matrix * Wz_matrix
+
