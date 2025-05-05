@@ -1,19 +1,38 @@
 import numpy as np
 
-OM = 2 * np.pi * 3.5e6
-# xi2 = 2.380762
-xi2 = 0.760829
-tau = 4.292682 / OM
-delta = 0.377371 * OM
-A_INT_CONSTANT = 0.0
-
-OM_small = 2 * np.pi * 7.158e3
+# GLOBAL CONSTANTS
+kB = 1.380649e-23  # Boltzmann constant in J/K
 HBAR = 1.05457159682e-34  # J \cdot s, or 6.582 118 89(26) eV \cdot s
-M = 1.4431606011e-25  # kg
-Q = 0.0  # TODO: make changable
-V_INT_CONSTANT = 1.0
+OM_small = 2 * np.pi * 7.158e3
+M = 1.4431606011e-25  # kg, Rb atom mass
+xi2 = 0.760829  # constant phase
 
 
-p0z = 1e-27  # kg * m / s
-Z_ast = 1e-5  # m (10 micrometers)
-W_INT_CONSTANT = 0.0
+# W-matrix constants
+lambd_1 = 795e-9
+lambd_2 = 480e-9
+w01 = 3e-6
+w02 = 3e-6
+z_r1 = np.pi * w01 ** 2 / lambd_1
+z_r2 = np.pi * w02 ** 2 / lambd_2
+p0z = np.sqrt(HBAR * M * OM_small / 2)  # kg * m / s; coeff '2' is saved here, but not used in momentum matrices
+Z_ast = 2 * z_r1 * z_r2 / (z_r1 + z_r2)
+W_INT_CONSTANT = 1.0
+
+z_ij_matrix = np.zeros((3, 3), dtype=complex)
+z_ij_matrix[0, 0] = 1 / z_r1 ** 2
+z_ij_matrix[1, 1] = 1 / z_r1 ** 2
+z_ij_matrix[1, 2] = 1 / 2 / (z_r1 ** 2) + 1 / 2 / (z_r2 ** 2)
+z_ij_matrix[2, 1] = 1 / 2 / (z_r1 ** 2) + 1 / 2 / (z_r2 ** 2)
+z_ij_matrix[2, 2] = 1 / z_r2 ** 2
+DELTA_b = DELTA_r = - 2 * np.pi * 2.5 * 1e6
+DELTA_a = - 2 * np.pi * 0.7 * 1e6
+
+# ### INTIAL STATE PARAMS
+# n = 100
+
+
+def get_params(om):
+    tau = 4.292682 / om
+    delta = 0.377371 * om
+    return tau, delta
