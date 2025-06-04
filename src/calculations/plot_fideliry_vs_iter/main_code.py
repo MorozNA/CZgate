@@ -3,7 +3,7 @@ from src.calculations.algorithm_fun import one_iteration, exact_evolution
 from src.calculations.initial_parameters import rho_S0
 from src.calculations.initial_parameters import rho_TA_0, rho_TA_1, rho_TA_2, rho_TA_3
 from src.calculations.initial_parameters import rho_TB_0, rho_TB_1, rho_TB_2, rho_TB_3
-from src.calculations.initial_parameters import U0, Y_A, Y_B
+from src.calculations.initial_parameters import U0, U0_perfect, Y_A, Y_B
 from tqdm import tqdm
 
 fidelity0 = []
@@ -17,10 +17,10 @@ rho_S0_1 = np.copy(rho_S0)
 rho_S0_2 = np.copy(rho_S0)
 rho_S0_3 = np.copy(rho_S0)
 
-iterations = 100
+iterations = 50
 
 for i in tqdm(range(iterations)):
-    exact_rho = exact_evolution(rho_S0, U0)
+    exact_rho = exact_evolution(rho_S0, U0_perfect)
     rho_S0 = exact_rho
     calc_rho_0, rho_TA_0, rho_TB_0 = one_iteration(rho_S0_0, rho_TA_0, rho_TB_0, U0, Y_A, Y_B)
     calc_rho_1, rho_TA_1, rho_TB_1 = one_iteration(rho_S0_1, rho_TA_1, rho_TB_1, U0, Y_A, Y_B)

@@ -3,13 +3,13 @@ from tqdm import tqdm
 from src.y_operator.params import p0z, HBAR, OM_small, M, lambd_1, lambd_2
 from src.calculations.plot_effect.tools_fun import get_rho_T0
 from src.y_operator.construct_U0 import construct_U0
-# from src.y_operator.tests.bad_u0 import construct_bad_U0
 from src.y_operator.construct_Y import construct_Y_A, construct_Y_B
 from src.calculations.algorithm_fun import one_iteration, exact_evolution
 
 Q = 2 * np.pi * (1 / lambd_2 - 1 / lambd_1)
-print(HBAR * Q, p0z)
-expected_fidelity_flag = True
+# print(HBAR * Q, p0z)
+# Q = 0.0
+expected_fidelity_flag = False
 
 print('x0: ', np.sqrt(HBAR / M / OM_small))
 
@@ -50,7 +50,9 @@ fidelity3 = []
 f_expected = []
 
 ### ARRAY OF TIMES TAU
-tau_array = np.linspace(50, 400, 10) * 1e-9
+# tau_array = np.linspace(50, 250, 100) * 1e-9
+tau_array = np.linspace(150, 400, 50) * 1e-9  # TODO: pi-2pi-pi
+
 
 for tau in tqdm(tau_array):
     omega = 4.292682 / tau
@@ -65,8 +67,9 @@ for tau in tqdm(tau_array):
     Y_A = construct_Y_A(t_initial, t_final, omega, Q, n)
     Y_B = construct_Y_B(t_initial, t_final, omega, Q, n)
     U0 = construct_U0(t_final, omega)
+    U0_perfect = construct_U0(t_final, omega, False)
 
-    exact_rho = exact_evolution(rho_S0, U0)
+    exact_rho = exact_evolution(rho_S0, U0_perfect)
     calc_rho_0, _, _ = one_iteration(rho_S0, rho_TA_0, rho_TB_0, U0, Y_A, Y_B)
     calc_rho_1, _, _ = one_iteration(rho_S0, rho_TA_1, rho_TB_1, U0, Y_A, Y_B)
     calc_rho_2, _, _ = one_iteration(rho_S0, rho_TA_2, rho_TB_2, U0, Y_A, Y_B)

@@ -12,4 +12,4 @@ def get_rho_T0(T, n):
     E_normalized = En / (kB * T)
     rho_T0 = np.diag(np.exp(-E_normalized))
     rho_T0 = rho_T0 / trace_check
-    return np.round(rho_T0 / np.trace(rho_T0), 10)
+    return rho_T0 / np.trace(rho_T0)

@@ -4,9 +4,10 @@ from src.y_operator.params import get_params
 from src.y_operator.construct_U0 import construct_U0
 from src.y_operator.construct_Y import construct_Y_A, construct_Y_B
 
-n = 100
+delta_R = None
+n = 50
 OM = 2 * np.pi * 3.5e6
-tau, delta = get_params(OM)
+tau, delta, _ = get_params(OM, delta_R)
 
 print(2 * tau)
 
@@ -17,6 +18,7 @@ t_final = 2.0 * tau
 Y_A = construct_Y_A(t_initial, t_final, OM, Q, n)
 Y_B = construct_Y_B(t_initial, t_final, OM, Q, n)
 U0 = construct_U0(t_final, OM)
+U0_perfect = construct_U0(t_final, OM, None)  # TODO: this should be changed to 'ideal' CZ
 
 
 def get_rho_T0(T, n):

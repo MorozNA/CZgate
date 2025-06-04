@@ -7,7 +7,9 @@ def one_iteration(rho_S0, rho_T0A, rho_T0B, U0, Y_A, Y_B, to_print=False):
     rho_SA = calculate_rho_SX(rho_S0, rho_T0A, Y_A)
     rho_SB = calculate_rho_SX(rho_S0, rho_T0B, Y_B)
 
-    rho_S = calculate_spin_density_withX(rho_SB, rho_T0A, U0, Y_A)
+    rho_S1 = calculate_spin_density_withX(rho_SB, rho_T0A, U0, Y_A)
+    rho_S2 = calculate_spin_density_withX(rho_SA, rho_T0B, U0, Y_B)
+    rho_S = (rho_S1 + rho_S2) / 2
 
     rho_TA = np.zeros((len(rho_T0A), len(rho_T0A)), dtype=complex)
     rho_TB = np.zeros((len(rho_T0B), len(rho_T0B)), dtype=complex)
