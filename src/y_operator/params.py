@@ -35,11 +35,6 @@ DELTA_a = - 2 * np.pi * 0.7 * 1e6
 from src.y_operator.calc_params import calc_params
 
 
-def get_params(om, delta_rydberg=None):
-    if delta_rydberg is None:
-        tau = 4.292682 / om
-        delta = 0.377371 * om
-        xi = 0.760829
-    else:
-        tau, delta, xi = calc_params(om, delta_rydberg)
+def get_params(om, delta_rydberg):
+    tau, delta, xi = calc_params(om, delta_rydberg)
     return tau, delta, xi

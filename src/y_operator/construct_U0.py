@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.linalg import expm
 from src.y_operator.params import get_params
 
 
@@ -38,29 +39,28 @@ def change_basis(matrix):
 
 
 def get_U(delta, omega, xi, t):
-    om_0 = np.sqrt(omega ** 2 + delta ** 2)
-    Ubb = (np.cos(om_0 * t / 2) + 1j * delta / om_0 * np.sin(om_0 * t / 2)) * np.exp(-1j * delta * t / 2)
-    Ubr = 1j * omega / om_0 * np.sin(om_0 * t / 2) * np.exp(1j * xi - 1j * delta * t / 2)
-    Urb = 1j * omega / om_0 * np.sin(om_0 * t / 2) * np.exp(-1j * xi + 1j * delta * t / 2)
-    Urr = (np.cos(om_0 * t / 2) - 1j * delta / om_0 * np.sin(om_0 * t / 2)) * np.exp(1j * delta * t / 2)
-    U = np.array([[Ubb, Ubr], [Urb, Urr]], dtype=complex)
+    om_0 = np.sqrt(delta ** 2 + omega ** 2)
+    cos_term = np.cos(om_0 * t / 2)
+    sin_term = np.sin(om_0 * t / 2)
+    U_bb = cos_term - 1j * delta / om_0 * sin_term
+    U_br = -1j * (omega * np.exp(1j * xi)) / om_0 * sin_term
+    U_rb = -1j * (omega * np.exp(-1j * xi)) / om_0 * sin_term
+    U_rr = cos_term + 1j * delta / om_0 * sin_term
+
+    U = np.array([[U_bb, U_br], [U_rb, U_rr]], dtype=complex) * np.exp(1j * delta * t / 2)
     return U
-
-
-from scipy.linalg import expm
 
 
 def get_U_deltaR(delta, omega, xi, t, delta_rydberg):
     # CAREFULL WITH SQRT(2) * OMEGA
-    om_0 = omega
     Hamiltonian = np.zeros((3, 3), dtype=complex)
-    Hamiltonian[0, 0] = - delta / 2
-    Hamiltonian[0, 1] = om_0 / 2 * np.exp(1j * xi)
+    Hamiltonian[0, 0] = 0
+    Hamiltonian[0, 1] = (np.sqrt(2) * omega) / 2 * np.exp(1j * xi)
     Hamiltonian[1, 0] = Hamiltonian[0, 1].conj()
-    Hamiltonian[1, 1] = delta / 2
-    Hamiltonian[1, 2] = om_0 / 2 * np.exp(1j * xi)
+    Hamiltonian[1, 1] = - delta
+    Hamiltonian[1, 2] = (np.sqrt(2) * omega) / 2 * np.exp(1j * xi)
     Hamiltonian[2, 1] = Hamiltonian[1, 2].conj()
-    Hamiltonian[2, 2] = - delta_rydberg  # - 2 * delta  # TODO: SHOULD -2 * delta be here???
+    Hamiltonian[2, 2] = delta_rydberg  # - 2 * delta
     U_delta = expm(-1j * Hamiltonian * t)
     if not np.allclose(U_delta @ U_delta.conj().T, np.eye(U_delta.shape[0])):
         raise ValueError("Output matrix U_delta is not unitary!")
@@ -73,89 +73,34 @@ def construct_U0(t, om, delta_rydberg=None):
         U1 = np.eye(9, dtype=complex)
         U1[1:3, 1:3] = get_U(delta, om, 0.0, t)
         U1[3:5, 3:5] = get_U(delta, om, 0.0, t)
-        if delta_rydberg is not None:
-            # U1[5:7, 5:7] = get_U(delta - om**2 / 2 / delta_rydberg, np.sqrt(2) * om, 0.0, t)
-            # # TODO: carefully check args again
-            U_deltaR = get_U_deltaR(delta, np.sqrt(2) * om, 0.0, t, delta_rydberg)
-            U1[5, 5] = U_deltaR[0, 0]
-            U1[5, 6] = U_deltaR[0, 1]
-            U1[5, 8] = U_deltaR[0, 2]
-            U1[6, 5] = U_deltaR[1, 0]
-            U1[6, 6] = U_deltaR[1, 1]
-            U1[6, 8] = U_deltaR[1, 2]
-            U1[8, 5] = U_deltaR[2, 0]
-            U1[8, 6] = U_deltaR[2, 1]
-            U1[8, 8] = U_deltaR[2, 2]
-        else:
-            U1[5:7, 5:7] = get_U(delta, np.sqrt(2) * om, 0.0, t)
+        # U1[5:7, 5:7] = get_U(delta, np.sqrt(2) * om, 0.0, t)
+
+        U_deltaR1 = get_U_deltaR(delta, om, 0.0, t, delta_rydberg)
+        rows = [5, 6, 8]  # Target rows in U1
+        cols = [5, 6, 8]  # Target columns in U1
+        U1[np.ix_(rows, cols)] = U_deltaR1
         return change_basis(U1)
     else:
         U1 = np.eye(9, dtype=complex)
         U1[1:3, 1:3] = get_U(delta, om, 0.0, tau)
         U1[3:5, 3:5] = get_U(delta, om, 0.0, tau)
-        if delta_rydberg is not None:
-            # U1[5:7, 5:7] = get_U(delta - om**2 / 2 / delta_rydberg, np.sqrt(2) * om, 0.0, tau)
-            U_deltaR = get_U_deltaR(delta, np.sqrt(2) * om, 0.0, tau, delta_rydberg)
-            U1[5, 5] = U_deltaR[0, 0]
-            U1[5, 6] = U_deltaR[0, 1]
-            U1[5, 8] = U_deltaR[0, 2]
-            U1[6, 5] = U_deltaR[1, 0]
-            U1[6, 6] = U_deltaR[1, 1]
-            U1[6, 8] = U_deltaR[1, 2]
-            U1[8, 5] = U_deltaR[2, 0]
-            U1[8, 6] = U_deltaR[2, 1]
-            U1[8, 8] = U_deltaR[2, 2]
-        else:
-            U1[5:7, 5:7] = get_U(delta, np.sqrt(2) * om, 0.0, tau)
+        # U1[5:7, 5:7] = get_U(delta, np.sqrt(2) * om, 0.0, tau)
+
+        U_deltaR1 = get_U_deltaR(delta, om, 0.0, tau, delta_rydberg)
+        rows = [5, 6, 8]  # Target rows in U1
+        cols = [5, 6, 8]  # Target columns in U1
+        U1[np.ix_(rows, cols)] = U_deltaR1
+
         U2 = np.eye(9, dtype=complex)
         U2[1:3, 1:3] = get_U(delta, om, xi, t - tau)
         U2[3:5, 3:5] = get_U(delta, om, xi, t - tau)
-        if delta_rydberg is not None:
-            # U2[5:7, 5:7] = get_U(delta - om**2 / 2 / delta_rydberg, np.sqrt(2) * om, xi, t - tau)
-            U_deltaR = get_U_deltaR(delta, np.sqrt(2) * om, xi, t - tau, delta_rydberg)
-            U2[5, 5] = U_deltaR[0, 0]
-            U2[5, 6] = U_deltaR[0, 1]
-            U2[5, 8] = U_deltaR[0, 2]
-            U2[6, 5] = U_deltaR[1, 0]
-            U2[6, 6] = U_deltaR[1, 1]
-            U2[6, 8] = U_deltaR[1, 2]
-            U2[8, 5] = U_deltaR[2, 0]
-            U2[8, 6] = U_deltaR[2, 1]
-            U2[8, 8] = U_deltaR[2, 2]
-        else:
-            U2[5:7, 5:7] = get_U(delta, np.sqrt(2) * om, xi, t - tau)
-        if not np.allclose((U2 @ U1) @ (U2 @ U1).conj().T, np.eye(U2.shape[0])):
-            raise ValueError("Input matrix U2 is not unitary!")
-        return change_basis(U2 @ U1)
+        # U2[5:7, 5:7] = get_U(delta, np.sqrt(2) * om, xi, t - tau)
 
+        U_deltaR2 = get_U_deltaR(delta, om, xi, t - tau, delta_rydberg)
+        rows = [5, 6, 8]  # Target rows in U1
+        cols = [5, 6, 8]  # Target columns in U1
+        U2[np.ix_(rows, cols)] = U_deltaR2
 
-def construct_U0_elimination(t, om, delta_rydberg=None):
-    tau, delta, xi = get_params(om, delta_rydberg)
-    if t <= tau:
-        U1 = np.eye(9, dtype=complex)
-        U1[1:3, 1:3] = get_U(delta, om, 0.0, t)
-        U1[3:5, 3:5] = get_U(delta, om, 0.0, t)
-        if delta_rydberg is not None:
-            ## :TODO: delta - om**2 / 2 / delta_R or delta - (np.sqrt * om) ** 2 / 2 / delta_R
-            U1[5:7, 5:7] = get_U(delta - (np.sqrt(2) * om) ** 2 / 2 / delta_rydberg, np.sqrt(2) * om, 0.0, t)
-        else:
-            U1[5:7, 5:7] = get_U(delta, np.sqrt(2) * om, 0.0, t)
-        return change_basis(U1)
-    else:
-        U1 = np.eye(9, dtype=complex)
-        U1[1:3, 1:3] = get_U(delta, om, 0.0, tau)
-        U1[3:5, 3:5] = get_U(delta, om, 0.0, tau)
-        if delta_rydberg is not None:
-            U1[5:7, 5:7] = get_U(delta - (np.sqrt(2) * om) ** 2 / 2 / delta_rydberg, np.sqrt(2) * om, 0.0, tau)
-        else:
-            U1[5:7, 5:7] = get_U(delta, np.sqrt(2) * om, 0.0, tau)
-        U2 = np.eye(9, dtype=complex)
-        U2[1:3, 1:3] = get_U(delta, om, xi, t - tau)
-        U2[3:5, 3:5] = get_U(delta, om, xi, t - tau)
-        if delta_rydberg is not None:
-            U2[5:7, 5:7] = get_U(delta - (np.sqrt(2) * om) ** 2 / 2 / delta_rydberg, np.sqrt(2) * om, xi, t - tau)
-        else:
-            U2[5:7, 5:7] = get_U(delta, np.sqrt(2) * om, xi, t - tau)
         if not np.allclose((U2 @ U1) @ (U2 @ U1).conj().T, np.eye(U2.shape[0])):
             raise ValueError("Input matrix U2 is not unitary!")
         return change_basis(U2 @ U1)
