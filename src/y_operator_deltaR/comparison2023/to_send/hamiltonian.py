@@ -33,13 +33,7 @@ def get_FullHamiltonian(om, delta, xi, delta_rydberg):
     return hamiltonian
 
 
-def get_evolution(om, delta, xi, delta_rydberg, t):
-    delta_renorm = delta + (om ** 2) / (2 * delta_rydberg)
-    tau = 2 * np.pi / np.sqrt(2 * om ** 2 + delta_renorm ** 2)
-
-    if t <= tau:
-        return expm(-1j * get_FullHamiltonian(om, delta, 0.0, delta_rydberg) * t)
-    else:
-        U1 = expm(-1j * get_FullHamiltonian(om, delta, 0.0, delta_rydberg) * tau)
-        U2 = expm(-1j * get_FullHamiltonian(om, delta, xi, delta_rydberg) * (t - tau))
-        return U2 @ U1
+def get_evolution(om, delta, xi, delta_rydberg, tau):
+    U1 = expm(-1j * get_FullHamiltonian(om, delta, 0.0, delta_rydberg) * tau)
+    U2 = expm(-1j * get_FullHamiltonian(om, delta, xi, delta_rydberg) * tau)
+    return U2 @ U1

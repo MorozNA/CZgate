@@ -32,9 +32,9 @@ DELTA_a = - 2 * np.pi * 0.7 * 1e6
 # n = 100
 
 
-from src.y_operator.calc_params import calc_params
+from src.y_operator_deltaR.calc_params import calc_params
 
 
-def get_params(om):
-    tau, delta, xi = calc_params(om)
+def get_params(om, delta_rydberg):
+    tau, delta, xi = calc_params(om, delta_rydberg)
     return tau, delta, xi

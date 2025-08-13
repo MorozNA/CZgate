@@ -24,7 +24,7 @@ for i in range(len(om_array)):
     tau = tau_times_omega_arr[i] / om
     xi = xi_arr[i]
 
-    U0_with_leakage = get_evolution(om, delta, xi, delta_rydberg, 2 * tau)
+    U0_with_leakage = get_evolution(om, delta, xi, delta_rydberg, tau)
 
     delta_renorm = delta + (om ** 2) / (2 * delta_rydberg)
     phi2 = delta_renorm * tau

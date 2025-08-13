@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from src.calculations.plot_temperature.approximate_function import get_temperature
 from src.calculations.for_server.get_rho_fun import get_rho_T0
 from src.calculations.for_server.distribution_change.temp0_distr_init import n
-from src.y_operator.params import HBAR, OM_small
+from src.y_operator_deltaR.params import HBAR, OM_small
 
 # Set a LaTeX-like font (no need for rc('text', usetex=True))
 plt.rcParams["font.family"] = "serif"  # Uses default serif font (like Times New Roman)

@@ -1,7 +1,7 @@
 import numpy as np
-from src.y_operator.calc_params import get_delta_renorm
-from src.y_operator.params import get_params
-from src.y_operator.construct_U0 import construct_U0
+from src.y_operator_deltaR.calc_params import get_delta_renorm
+from src.y_operator_deltaR.params import get_params
+from src.y_operator_deltaR.construct_U0 import construct_U0
 
 # initial_state = np.zeros((9, 1), dtype=complex)
 # initial_state[0] = 1.0 / np.sqrt(2)
@@ -69,6 +69,7 @@ for i in range(len(deltaR_array)):
         print('phi1_exact = ', phase_exact_1)
         print('phi1_exact = ', phase_exact_3)
         print('(phi2_exact - pi) / 2 = ', (phase_exact_4 - np.pi) / 2)
+
         import pandas as pd
         # Convert to strings in "a+bj" format
         U_str = np.array([[f"{x.real:.2f}{x.imag:+.2f}j" for x in row] for row in U0_with_leakage])
@@ -98,22 +99,22 @@ for i in range(len(deltaR_array)):
 
 ax1.set_ylabel('Fidelity')
 ax1.grid(True)
-ax1.set_ylim([0.995, 1.001])
+ax1.set_ylim([0.975, 1.001])
 ax1.legend()
 
 # Add ticks to all sides of the first plot
 ax1.tick_params(which='both', direction='in', top=True, right=True)
-ax1.set_yticks(np.arange(0.995, 1.001, 0.001))  # Y-ticks every 0.005
+ax1.set_yticks(np.arange(0.975, 1.001, 0.005))  # Y-ticks every 0.005
 ax1.minorticks_on()  # Enable minor ticks
 
 # Lower plot: CZ_time vs om_array/(2π)
 for i in range(len(deltaR_array)):
     delta_R_MHz = deltaR_array[i]/(2*np.pi*1e6)  # Convert to MHz for legend
     ax2.plot(om_array/(2*np.pi * 1e6), np.array(cz_time[i])*1e6,  # Convert to μs
-             label=f'$\delta_R/(2π)$ = {delta_R_MHz:.0f} MHz', color=colors[i])
+             label=r'$\delta_R/(2π)$ = {delta_R_MHz:.0f} MHz', color=colors[i])
 
 ax2.set_xlabel(r'$|\Omega|/(2π)$ (MHz)')
-ax2.set_ylabel('CZ Time ($\mu s$)')
+ax2.set_ylabel(r'CZ Time ($\mu s$)')
 ax2.grid(True)
 
 # Add ticks to all sides of the second plot
@@ -124,12 +125,12 @@ ax2.minorticks_on()  # Enable minor ticks
 plt.tight_layout()
 
 # Save the plot in high resolution
-# plt.savefig(
-#     'cz_gate_analysis_closer.png',  # File name (supports .png, .pdf, .svg, .jpg)
-#     dpi=300,                 # High resolution (300 dots per inch)
-#     bbox_inches='tight',     # Prevent cropping
-#     transparent=False,       # White background (True for transparent)
-#     facecolor='white'        # Ensure background is white
-# )
+plt.savefig(
+    'cz_gate_analysis_closer.png',  # File name (supports .png, .pdf, .svg, .jpg)
+    dpi=300,                 # High resolution (300 dots per inch)
+    bbox_inches='tight',     # Prevent cropping
+    transparent=False,       # White background (True for transparent)
+    facecolor='white'        # Ensure background is white
+)
 
 plt.show()

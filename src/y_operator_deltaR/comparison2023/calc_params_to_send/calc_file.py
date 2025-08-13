@@ -24,9 +24,9 @@ for i in range(len(om_array)):
     tau = tau_times_omega_arr[i] / om
     xi = xi_arr[i]
 
-    U0_with_leakage = get_evolution(om, delta, xi, delta_rydberg, 2 * tau)
+    U0_with_leakage = get_evolution(om, delta, xi, delta_rydberg, tau)
 
-    delta_renorm = delta + (om ** 2) / (2 * delta_rydberg)
+    delta_renorm = delta + (om ** 2) / (2 * (delta_rydberg - 2 * delta))
     phi2 = delta_renorm * tau
     phi1 = (phi2 + np.pi) / 2
     CZ_expected = np.diag([1, np.exp(1j * phi1), 1, np.exp(1j * phi1), 1, np.exp(1j * phi2), 1, 1, 1])

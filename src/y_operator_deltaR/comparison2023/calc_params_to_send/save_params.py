@@ -1,15 +1,15 @@
 import numpy as np
-from src.y_operator.calc_params import get_delta_renorm
-from src.y_operator.params import get_params
-from src.calculations.comparison2023.to_send.hamiltonian import get_evolution
+from src.y_operator_deltaR.calc_params import get_delta_renorm
+from src.y_operator_deltaR.params import get_params
+from src.y_operator_deltaR.comparison2023.calc_params_to_send.hamiltonian import get_evolution
 
 
 initial_state = np.zeros((9, 1), dtype=complex)
 
-initial_state[0] = 1.0 / 2
-initial_state[1] = 1.0 / 2
-initial_state[3] = 1.0 / 2
-initial_state[5] = 1.0 / 2
+initial_state[0] = 0.5
+initial_state[1] = 0.5
+initial_state[3] = 0.5
+initial_state[5] = 0.5
 
 
 delta_R = 2 * np.pi * 30 * 1e6
@@ -24,7 +24,7 @@ cz_time = []
 
 for om in om_array:
     tau, delta, xi = get_params(om, delta_R)
-    U0_with_leakage = get_evolution(om, delta, xi, delta_R, 2 * tau)
+    U0_with_leakage = get_evolution(om, delta, xi, delta_R, tau)
 
     delta_renorm = get_delta_renorm(delta, om, delta_R)
     phi2 = delta_renorm * tau
