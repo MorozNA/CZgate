@@ -12,12 +12,14 @@ M = 1.4431606011e-25  # kg, Rb atom mass
 # W-matrix constants
 lambd_1 = 795e-9
 lambd_2 = 480e-9
-w01 = 3e-6
-w02 = 3e-6
+w01 = 10e-6
+w02 = 10e-6
 z_r1 = np.pi * w01 ** 2 / lambd_1
 z_r2 = np.pi * w02 ** 2 / lambd_2
 p0z = np.sqrt(HBAR * M * OM_small / 2)  # kg * m / s; coeff '2' is saved here, but not used in momentum matrices
 Z_ast = 2 * z_r1 * z_r2 / (z_r1 + z_r2)
+# print(p0z, Z_ast)
+# print(HBAR / Z_ast / p0z * 1e6 * 200e-9)
 
 z_ij_matrix = np.zeros((3, 3), dtype=complex)
 z_ij_matrix[0, 0] = 1 / z_r1 ** 2

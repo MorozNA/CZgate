@@ -26,13 +26,11 @@ def calc_xi(delta, omega, tau):
 def to_solve(delta, om, delta_rydberg):
     tau = calc_tau(delta, om, delta_rydberg)
     xi = calc_xi(delta, om, tau)
-    phi1 = delta * tau + xi + np.pi #- delta * tau
-    phi1 = np.angle(np.exp(1j * phi1))  # так fsolve работает, видимо потому что угол сидит в промежутке (-pi, pi]
+    phi1 = delta * tau + xi + np.pi # - delta * tau
+    phi1 = np.angle(np.exp(1j * phi1))  # to ensure that phi is in the (-pi, pi] interval
 
     delta_renorm = get_delta_renorm(delta, om, delta_rydberg)
     phi2 = delta_renorm * tau
-    # phi2 = 2 * phi + pi
-    # phi1 = phi + pi
 
     return phi2 - 2 * phi1 + np.pi
 

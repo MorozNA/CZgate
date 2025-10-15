@@ -67,8 +67,7 @@ def get_U_deltaR(delta, omega, xi, t, delta_rydberg):
     return U_delta
 
 
-def construct_U0(t, om, delta_rydberg):
-    tau, delta, xi = get_params(om, delta_rydberg)
+def construct_U0(t, om, tau, delta, xi, delta_rydberg):
     if t <= tau:
         U1 = np.eye(9, dtype=complex)
         U1[1:3, 1:3] = get_U(delta, om, 0.0, t)

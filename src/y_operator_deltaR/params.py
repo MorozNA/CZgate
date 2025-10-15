@@ -1,7 +1,7 @@
 import numpy as np
 
 # EFFECT CONSTANTS
-W_INT_CONSTANT = 1.0
+W_INT_CONSTANT = 0.0
 
 # GLOBAL CONSTANTS
 kB = 1.380649e-23  # Boltzmann constant in J/K
@@ -12,8 +12,8 @@ M = 1.4431606011e-25  # kg, Rb atom mass
 # W-matrix constants
 lambd_1 = 795e-9
 lambd_2 = 480e-9
-w01 = 3e-6
-w02 = 3e-6
+w01 = 10e-6
+w02 = 10e-6
 z_r1 = np.pi * w01 ** 2 / lambd_1
 z_r2 = np.pi * w02 ** 2 / lambd_2
 p0z = np.sqrt(HBAR * M * OM_small / 2)  # kg * m / s; coeff '2' is saved here, but not used in momentum matrices

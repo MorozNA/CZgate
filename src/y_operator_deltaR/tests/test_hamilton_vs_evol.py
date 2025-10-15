@@ -1,34 +1,18 @@
 import numpy as np
 import random
 from scipy.linalg import expm
-
-
-def get_U(delta, omega, xi, t):
-    om_0 = np.sqrt(delta ** 2 + omega ** 2)
-    cos_term = np.cos(om_0 * t / 2)
-    sin_term = np.sin(om_0 * t / 2)
-    U_bb = cos_term - 1j * delta / om_0 * sin_term
-    U_br = -1j * (omega * np.exp(1j * xi)) / om_0 * sin_term
-    U_rb = -1j * (omega * np.exp(-1j * xi)) / om_0 * sin_term
-    U_rr = cos_term + 1j * delta / om_0 * sin_term
-
-    U = np.array([[U_bb, U_br], [U_rb, U_rr]], dtype=complex) * np.exp(1j * delta * t / 2)
-    return U
+from src.y_operator_deltaR.construct_U0 import get_U
+from src.y_operator_deltaR.full_hamiltonian.get_hamiltonian0 import get_H_simple, get_H0
 
 
 def get_U_hamilton(delta, om, xi, t):
-    Hamiltonian = np.zeros((2, 2), dtype=complex)
-    Hamiltonian[0, 0] = 0.0
-    Hamiltonian[0, 1] = om / 2 * np.exp(1j * xi)
-    Hamiltonian[1, 0] = Hamiltonian[0, 1].conj()
-    Hamiltonian[1, 1] = -delta
-    evol_U = expm(-1j * Hamiltonian * t)
+    evol_U = expm(-1j * get_H_simple(delta, om, xi) * t)
     if not np.allclose(evol_U @ evol_U.conj().T, np.eye(evol_U.shape[0])):
         raise ValueError("Output matrix U_delta is not unitary!")
     return evol_U
 
 
-def test_matrix_equivalence():
+def test_simple_hamiltonian_equivalence():
     """Test that get_U and get_U_hamilton produce the same unitary matrix."""
     # Test parameters
     test_params = [

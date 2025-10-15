@@ -1,5 +1,5 @@
 import numpy as np
-from src.y_operator_deltaR.params import HBAR, p0z
+from src.y_operator.params import HBAR, p0z
 
 
 def get_V1_vib(n):

@@ -1,6 +1,5 @@
 import numpy as np
 from scipy.linalg import expm
-from src.y_operator.params import get_params
 
 
 def swap_basis(matrix, i, j):
@@ -52,8 +51,7 @@ def get_U(delta, omega, xi, t):
 
 
 
-def construct_U0(t, om):
-    tau, delta, xi = get_params(om)
+def construct_U0(t, om, tau, delta, xi):
     if t <= tau:
         U1 = np.eye(9, dtype=complex)
         U1[1:3, 1:3] = get_U(delta, om, 0.0, t)
