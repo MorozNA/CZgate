@@ -36,3 +36,17 @@ def get_Wz_vib(n):
     p2_3 = np.diag(np.sqrt(nu[2::] * (nu[2::] - 1)), -2)
     return -(p2_1 + p2_2 + p2_3)
 
+
+
+
+# nu = np.arange(n)
+#
+# term1_off2 = (2 * nu[2:] - 3) * np.sqrt(nu[2:] * (nu[2:] - 1))
+# term2_off2 = (2 * nu[2:] + 1) * np.sqrt(nu[2:] * (nu[2:] - 1))
+# p4_off2 = -np.diag(term1_off2 + term2_off2, 2)
+#
+# term_off4 = np.sqrt(nu[4:] * (nu[4:] - 1) * (nu[4:] - 2) * (nu[4:] - 3))
+# p4_off4 = np.diag(term_off4, 4)
+#
+# p4_diag = np.diag((2 * nu + 1) ** 2 + nu * (nu - 1) + (nu + 1) * (nu + 2))
+# p4 = p4_diag + p4_off2 + p4_off2.T + p4_off4 + p4_off4.T

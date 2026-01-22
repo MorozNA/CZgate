@@ -8,10 +8,10 @@ from src.y_operator_deltaR.params import get_params
 
 
 # INITIAL PARAMETERS
-n = 50
+n = 200
 Q = 0.0
-# delta_R = 2 * np.pi * 50e6
-delta_R = 1e9
+delta_R = 2 * np.pi * 50e6
+# delta_R = 1e9
 
 
 # INITIAL STATES
@@ -53,10 +53,12 @@ for om in tqdm(om_array):
     rho_algorithm_T0, _, _ = one_iteration(np.copy(rho_S0), np.copy(rho_T0), np.copy(rho_T0), U0, YA, YB)
     rho_algorithm_T1, _, _ = one_iteration(np.copy(rho_S0), np.copy(rho_T1), np.copy(rho_T1), U0, YA, YB)
     rho_algorithm_T5, _, _ = one_iteration(np.copy(rho_S0), np.copy(rho_T5), np.copy(rho_T5), U0, YA, YB)
+    print('3', '\n')
 
     # IDEAL SPIN DENSITY MATRIX EVOLUTION
     U0_ideal = get_U0_ideal(tau, delta, xi)
     rho_ideal = exact_evolution(rho_S0, U0_ideal)
+    print('4', '\n')
 
     # Save info
     tau_array.append(tau)

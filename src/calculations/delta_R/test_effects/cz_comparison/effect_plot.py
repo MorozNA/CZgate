@@ -1,4 +1,4 @@
-from src.calculations.delta_R.test_effects.effect_calc import fidelity0, fidelity1, fidelity5, tau_array
+from src.calculations.delta_R.test_effects.cz_comparison.effect_calc import fidelity0, fidelity1, fidelity5, tau_array
 
 import numpy as np
 from matplotlib import pyplot as plt

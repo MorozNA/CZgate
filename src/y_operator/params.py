@@ -30,6 +30,14 @@ z_ij_matrix[2, 2] = 1 / z_r2 ** 2
 DELTA_b = DELTA_r = - 2 * np.pi * 2.5 * 1e6
 DELTA_a = - 2 * np.pi * 0.7 * 1e6
 
+
+x_ij_matrix = np.zeros((3, 3), dtype=complex)
+x_ij_matrix[0, 0] = 1 / w01 ** 2
+x_ij_matrix[1, 1] = 1 / w01 ** 2
+x_ij_matrix[1, 2] = 1 / (w01 ** 2) + 1 / (w02 ** 2)
+x_ij_matrix[2, 1] = 1 / (w01 ** 2) + 1 / (w02 ** 2)
+x_ij_matrix[2, 2] = 1 / w01 ** 2
+
 # ### INTIAL STATE PARAMS
 # n = 100
 
