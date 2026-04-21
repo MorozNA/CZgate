@@ -54,18 +54,18 @@ def get_integrand_Wz_B(t, om, tau, delta, xi, delta_rydberg):
 
 
 def get_integrals_A(t_initial, t_final, om, tau, delta, xi, delta_rydberg):
-    integral_V1, error = quad_vec(lambda t: get_integrand_V1_A(t, om, tau, delta, xi, delta_rydberg), t_initial, t_final)
-    integral_V2, error = quad_vec(lambda t: get_integrand_V2_A(t, om, tau, delta, xi, delta_rydberg), t_initial, t_final)
-    integral_W0z, error = quad_vec(lambda t: get_integrand_W0z_A(t, om, tau, delta, xi, delta_rydberg), t_initial, t_final)
-    integral_Wz, error = quad_vec(lambda t: get_integrand_Wz_A(t, om, tau, delta, xi, delta_rydberg), t_initial, t_final)
+    integral_V1, error = quad_vec(lambda t: get_integrand_V1_A(t, om, tau, delta, xi, delta_rydberg), t_initial, t_final, epsrel=1e-18)
+    integral_V2, error = quad_vec(lambda t: get_integrand_V2_A(t, om, tau, delta, xi, delta_rydberg), t_initial, t_final, epsrel=1e-18)
+    integral_W0z, error = quad_vec(lambda t: get_integrand_W0z_A(t, om, tau, delta, xi, delta_rydberg), t_initial, t_final, epsrel=1e-18)
+    integral_Wz, error = quad_vec(lambda t: get_integrand_Wz_A(t, om, tau, delta, xi, delta_rydberg), t_initial, t_final, epsrel=1e-18)
     return integral_V1, integral_V2, integral_W0z, integral_Wz
 
 
 def get_integrals_B(t_initial, t_final, om, tau, delta, xi, delta_rydberg):
-    integral_V1, error = quad_vec(lambda t: get_integrand_V1_B(t, om, tau, delta, xi, delta_rydberg), t_initial, t_final)
-    integral_V2, error = quad_vec(lambda t: get_integrand_V2_B(t, om, tau, delta, xi, delta_rydberg), t_initial, t_final)
-    integral_W0z, error = quad_vec(lambda t: get_integrand_W0z_B(t, om, tau, delta, xi, delta_rydberg), t_initial, t_final)
-    integral_Wz, error = quad_vec(lambda t: get_integrand_Wz_B(t, om, tau, delta, xi, delta_rydberg), t_initial, t_final)
+    integral_V1, error = quad_vec(lambda t: get_integrand_V1_B(t, om, tau, delta, xi, delta_rydberg), t_initial, t_final, epsrel=1e-18)
+    integral_V2, error = quad_vec(lambda t: get_integrand_V2_B(t, om, tau, delta, xi, delta_rydberg), t_initial, t_final, epsrel=1e-18)
+    integral_W0z, error = quad_vec(lambda t: get_integrand_W0z_B(t, om, tau, delta, xi, delta_rydberg), t_initial, t_final, epsrel=1e-18)
+    integral_Wz, error = quad_vec(lambda t: get_integrand_Wz_B(t, om, tau, delta, xi, delta_rydberg), t_initial, t_final, epsrel=1e-18)
     return integral_V1, integral_V2, integral_W0z, integral_Wz
 
 

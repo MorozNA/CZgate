@@ -42,6 +42,18 @@ def generalized_fidelity(rho, sigma):
     return np.clip(fidelity.real, 0.0, 1.0)
 
 
+from src.y_operator_deltaR.construct_U0 import get_U, get_U_deltaR, change_basis
+def construct_U0_for_trotter(t, om, tau, delta, xi, delta_rydberg):
+    U1 = np.eye(9, dtype=complex)
+    U1[1:3, 1:3] = get_U(delta, om, xi, t)
+    U1[3:5, 3:5] = get_U(delta, om, xi, t)
+
+    U_deltaR1 = get_U_deltaR(delta, om, xi, t, delta_rydberg)
+    rows = [5, 6, 8]  # Target rows in U1
+    cols = [5, 6, 8]  # Target columns in U1
+    U1[np.ix_(rows, cols)] = U_deltaR1
+    return change_basis(U1)
+
 
 # T = 5e-6
 # n = 150

@@ -34,7 +34,7 @@ def to_solve(delta, om, delta_R=None):
     tau = calc_tau(delta, om, delta_R)
     xi = calc_xi(delta, om, tau)
     phi1 = xi + np.pi
-    phi1 = np.angle(np.exp(1j * phi1))  # так fsolve работает, видимо потому что угол сидит в промежутке (-pi, pi]
+    phi1 = np.angle(np.exp(1j * phi1))  # fix phi in the interval (-pi, pi] for 'fsolve' to work
     if delta_R is None:
         delta_renorm = delta
     else:

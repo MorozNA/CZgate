@@ -1,5 +1,5 @@
 import numpy as np
-from src.algorithm.algorithm_tools_einsum import calculate_YrhoY
+from src.algorithm.algorithm_tools import calculate_YrhoY
 
 
 def one_iteration(rho_S0, rho_T0A, rho_T0B, U0, Y_A, Y_B):
