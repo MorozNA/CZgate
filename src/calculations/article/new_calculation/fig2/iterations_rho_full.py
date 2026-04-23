@@ -4,7 +4,7 @@ from src.algorithm.other_tools import get_rho_T0, get_U0_ideal, exact_evolution,
 from src.y_operator.full_hamiltonian.get_evolution import get_evolution
 from src.y_operator.construct_U0 import construct_U0
 from src.y_operator.params import lambd_1, lambd_2
-from src.y_operator.params import get_params
+from src.y_operator.calc_params import calc_params
 
 
 path = 'data/data_b/'
@@ -20,7 +20,7 @@ n = 30
 iterations = 30
 
 om = 2 * np.pi * 5e6
-tau, delta, xi = get_params(om, delta_R)
+tau, delta, xi = calc_params(om, delta_R)
 t_initial = 0.0
 t_final = 2 * tau
 print(r'$\tau$ = ', tau)

@@ -5,7 +5,7 @@ from src.algorithm.algorithm_fun_other import one_iteration
 from src.algorithm.other_tools import construct_U0_for_trotter
 from src.y_operator.construct_Y import construct_Y_A, construct_Y_B
 from src.y_operator.params import lambd_1, lambd_2
-from src.y_operator.params import get_params
+from src.y_operator.calc_params import calc_params
 
 
 path = 'data/data_a/opt_omega_30/'
@@ -24,7 +24,7 @@ Q = 2 * np.pi * (1 / lambd_2 - 1 / lambd_1)
 # Q = 0.0
 delta_R = 2 * np.pi * 50e6
 
-tau, delta, xi = get_params(om, delta_R)
+tau, delta, xi = calc_params(om, delta_R)
 t_initial = 0.0
 t_final = 2 * tau
 

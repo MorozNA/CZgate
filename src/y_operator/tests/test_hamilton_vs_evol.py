@@ -30,7 +30,6 @@ def test_simple_hamiltonian_equivalence():
         (1.0, 10.0, 0.1, 10.0),  # large omega and t
         (0.5, 1.0, 1.0, 100.0),  # large time
         (1e-5, 1e-5, 1e-5, 1e-5),  # very small all
-        # (1e5, 1e5, 1e5, 1e5),  # very large all
     ]
     for _ in range(5):  # add 5 random test cases
         test_params.append(tuple(10 ** random.uniform(-5, 5) for _ in range(4)))

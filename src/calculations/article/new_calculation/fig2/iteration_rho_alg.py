@@ -5,7 +5,7 @@ from src.algorithm.other_tools import construct_U0_for_trotter
 from src.algorithm.algorithm_fun_other import one_iteration
 from src.y_operator.construct_Y import construct_Y_A, construct_Y_B
 from src.y_operator.params import lambd_1, lambd_2
-from src.y_operator.params import get_params
+from src.y_operator.calc_params import calc_params
 
 
 temp_name = 1
@@ -22,7 +22,7 @@ n = 30
 iterations = 30
 
 om = 2 * np.pi * 5e6
-tau, delta, xi = get_params(om, delta_R)
+tau, delta, xi = calc_params(om, delta_R)
 print(r'$\tau$ = ', tau)
 
 # INITIAL STATES

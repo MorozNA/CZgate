@@ -45,7 +45,7 @@ def calc_delta(om, delta_rydberg=None):
     )[0]
 
 
-def calc_params(om, delta_rydberg):
+def calc_params(om, delta_rydberg=None):
     delta = calc_delta(om, delta_rydberg)
     tau = calc_tau(delta, om, delta_rydberg)
     xi = calc_xi(delta, om, tau)

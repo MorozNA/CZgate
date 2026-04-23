@@ -1,6 +1,6 @@
 import numpy as np
 from src.y_operator.construct_U0 import construct_U0
-from src.y_operator.consctust_spin_matrices import get_V1, get_V2, get_W0z, get_Wz
+from src.y_operator.construct_spin_matrices import get_V1, get_V2, get_W0z, get_Wz
 from src.y_operator.construct_vib_matrices import get_V1_vib, get_V2_vib, get_W0z_vib, get_Wz_vib
 from scipy.integrate import quad_vec
 

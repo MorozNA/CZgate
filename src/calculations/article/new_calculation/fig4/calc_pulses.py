@@ -4,7 +4,8 @@ from src.algorithm.other_tools import get_U0_ideal, exact_evolution, get_rho_T0,
 from calc_optimal_func import calc_optimal_om
 from src.algorithm.algorithm_fun_other import one_iteration
 from src.y_operator.construct_Y import construct_Y_A, construct_Y_B
-from src.y_operator.params import lambd_1, lambd_2, get_params
+from src.y_operator.params import lambd_1, lambd_2
+from src.y_operator.calc_params import calc_params
 
 
 T_muK = 5
@@ -48,7 +49,7 @@ if num_of_iter > 1:
     om0 = np.loadtxt(path + f'omegas_{1}.txt')[opt_ind]
     print('om0 = ', om0 / (2 * np.pi * 1e6))
 
-    tau, delta, xi = get_params(om0, delta_R)
+    tau, delta, xi = calc_params(om0, delta_R)
     U0_ideal = get_U0_ideal(tau, delta, xi)
     U01 = construct_U0_for_trotter(tau, om0, tau, delta, 0.0, delta_R)
     YA1 = construct_Y_A(0.0, tau, om0, tau, delta, 0.0, Q, n, delta_R)

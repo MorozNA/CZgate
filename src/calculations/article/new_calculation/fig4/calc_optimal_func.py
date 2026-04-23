@@ -4,7 +4,7 @@ from src.algorithm.other_tools import get_U0_ideal, exact_evolution, generalized
 from src.algorithm.algorithm_fun_other import one_iteration
 from src.algorithm.other_tools import construct_U0_for_trotter
 from src.y_operator.construct_Y import construct_Y_A, construct_Y_B
-from src.y_operator.params import get_params
+from src.y_operator.calc_params import calc_params
 
 
 def calc_optimal_om(om_left_MHz, om_right_MHz, Q, rho_elmotA_T0, rho_elmotB_T0, rho_el_T0, rho_T0_A, rho_T0_B, rho_ideal0, num_of_iter, num_of_omegas, delta_R=None, path='data/fidelities/'):
@@ -24,7 +24,7 @@ def calc_optimal_om(om_left_MHz, om_right_MHz, Q, rho_elmotA_T0, rho_elmotB_T0, 
 
     for om in tqdm(om_list):
         # CALCULATION
-        tau, delta, xi = get_params(om, delta_R)
+        tau, delta, xi = calc_params(om, delta_R)
 
         # EVOLUTION PROCESS
         U01 = construct_U0_for_trotter(tau, om, tau, delta, 0.0, delta_R)

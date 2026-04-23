@@ -5,9 +5,9 @@ from linear_regression import fit_temperature
 from src.algorithm.other_tools import get_rho_T0
 from src.algorithm.algorithm_fun_other import one_iteration
 from src.algorithm.other_tools import construct_U0_for_trotter
-from src.y_operator_deltaR.construct_Y import construct_Y_A, construct_Y_B
-from src.y_operator_deltaR.params import lambd_1, lambd_2
-from src.y_operator_deltaR.params import get_params
+from src.y_operator.construct_Y import construct_Y_A, construct_Y_B
+from src.y_operator.params import lambd_1, lambd_2
+from src.y_operator.calc_params import calc_params
 
 
 T_muK = 1.8
@@ -23,7 +23,7 @@ iterations = 100
 
 Q = 2 * np.pi * (1 / lambd_2 - 1 / lambd_1)
 delta_R = 2 * np.pi * 50e6
-tau, delta, xi = get_params(om, delta_R)
+tau, delta, xi = calc_params(om, delta_R)
 t_initial = 0.0
 t_final = 2 * tau
 print('Tau = ', tau / 1e-9, ' ns')

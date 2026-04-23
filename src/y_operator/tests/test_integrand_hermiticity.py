@@ -1,11 +1,11 @@
 from src.y_operator.consctust_spin_matrices import get_V1, get_V2, get_W0z, get_Wz
 from src.y_operator.construct_U0 import construct_U0
-from src.y_operator.params import get_params
+from src.y_operator.calc_params import calc_params
 import numpy as np
 
 # Initial parameters
 om = 2 * np.pi * 3.5e6
-tau, delta = get_params(om)
+tau, delta, xi = calc_params(om)
 t_initial = 0.0
 t_final = 2.0 * tau
 
@@ -13,11 +13,11 @@ t_final = 2.0 * tau
 def test_U0_unitarity():
     """Test that U0 is unitary (U0† U0 = I) at all times"""
     t_values = np.linspace(t_initial, t_final, 200)  # Test at multiple time points
-    U0 = construct_U0(t_values[0], om)
+    U0 = construct_U0(t_values[0], om, tau, delta, xi)
     identity = np.eye(U0.shape[0])  # Assuming U0
 
     for t in t_values:
-        U0 = construct_U0(t, om)
+        U0 = construct_U0(t, om, tau, delta, xi)
         # Check both conditions for complete unitarity
         product1 = U0 @ U0.conj().T
         product2 = U0.conj().T @ U0

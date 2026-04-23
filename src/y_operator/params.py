@@ -38,11 +38,3 @@ x_ij_matrix[2, 2] = 1 / w01 ** 2
 
 # ### INTIAL STATE PARAMS
 # n = 100
-
-
-from src.y_operator_deltaR.calc_params import calc_params
-
-
-def get_params(om, delta_rydberg):
-    tau, delta, xi = calc_params(om, delta_rydberg)
-    return tau, delta, xi
