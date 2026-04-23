@@ -3,9 +3,9 @@ from tqdm import tqdm
 from src.algorithm.other_tools import get_rho_T0, get_U0_ideal, exact_evolution, generalized_fidelity
 from src.algorithm.other_tools import construct_U0_for_trotter
 from src.algorithm.algorithm_fun_other import one_iteration
-from src.y_operator_deltaR.construct_Y import construct_Y_A, construct_Y_B
-from src.y_operator_deltaR.params import lambd_1, lambd_2
-from src.y_operator_deltaR.params import get_params
+from src.y_operator.construct_Y import construct_Y_A, construct_Y_B
+from src.y_operator.params import lambd_1, lambd_2
+from src.y_operator.params import get_params
 
 
 temp_name = 1
@@ -45,12 +45,12 @@ rho_ideal = np.copy(rho_S0)
 
 # EVOLUTION OPERATORS
 U01 = construct_U0_for_trotter(tau, om, tau, delta, 0.0, delta_R)
-YA1 = construct_Y_A(0.0, tau, om, tau, delta, 0.0, delta_R, Q, n)
-YB1 = construct_Y_B(0.0, tau, om, tau, delta, 0.0, delta_R, Q, n)
+YA1 = construct_Y_A(0.0, tau, om, tau, delta, 0.0, Q, n, delta_R)
+YB1 = construct_Y_B(0.0, tau, om, tau, delta, 0.0, Q, n, delta_R)
 
 U02 = construct_U0_for_trotter(tau, om, tau, delta, xi, delta_R)
-YA2 = construct_Y_A(tau, 2 * tau, om, tau, delta, xi, delta_R, Q, n)
-YB2 = construct_Y_B(tau, 2 * tau, om, tau, delta, xi, delta_R, Q, n)
+YA2 = construct_Y_A(tau, 2 * tau, om, tau, delta, xi, Q, n, delta_R)
+YB2 = construct_Y_B(tau, 2 * tau, om, tau, delta, xi, Q, n, delta_R)
 
 
 # DATA LISTS

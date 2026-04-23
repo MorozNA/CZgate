@@ -1,9 +1,9 @@
 from scipy.linalg import expm
 import numpy as np
-from src.y_operator_deltaR.construct_Y import integrate_matrix_A, integrate_matrix_B
-from src.y_operator_deltaR.construct_Y import get_V1, get_V2, get_W0z, get_Wz
-from src.y_operator_deltaR.construct_Y import V1_vib, get_V2_vib, W0z_vib, Wz_vib
-from src.y_operator_deltaR.params import get_params
+from src.y_operator.construct_Y import integrate_matrix_A, integrate_matrix_B
+from src.y_operator.construct_Y import get_V1, get_V2, get_W0z, get_Wz
+from src.y_operator.construct_Y import V1_vib, get_V2_vib, W0z_vib, Wz_vib
+from src.y_operator.params import get_params
 
 """Test that the final combined integral in construct_Y_A is Hermitian"""
 om = 2 * np.pi * 3.5e6

@@ -1,5 +1,5 @@
-from src.y_operator_deltaR.consctust_spin_matrices import get_V1, get_V2, get_W0z, get_Wz
-from src.y_operator_deltaR.params import get_params
+from src.y_operator.consctust_spin_matrices import get_V1, get_V2, get_W0z, get_Wz
+from src.y_operator.params import get_params
 import numpy as np
 import pytest
 

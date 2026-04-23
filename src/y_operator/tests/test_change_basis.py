@@ -1,6 +1,6 @@
 import numpy as np
-from src.y_operator_deltaR.construct_U0 import swap_basis
-from src.y_operator_deltaR.construct_U0 import apply_hadamard
+from src.y_operator.construct_U0 import swap_basis
+from src.y_operator.construct_U0 import apply_hadamard
 
 
 def swap_basis_to_check(matrix, i, j):

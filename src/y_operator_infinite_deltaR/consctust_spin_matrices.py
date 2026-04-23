@@ -1,11 +1,10 @@
 import numpy as np
-from src.y_operator_deltaR.params import HBAR, M, p0z, Z_ast
-from src.y_operator_deltaR.params import z_ij_matrix, DELTA_a, DELTA_b, DELTA_r
-from src.y_operator_deltaR.params import W_INT_CONSTANT
-from src.y_operator_deltaR.params import OM_small
+from src.y_operator.params import HBAR, M, p0z, Z_ast
+from src.y_operator.params import z_ij_matrix, DELTA_a, DELTA_b, DELTA_r
+from src.y_operator.params import W_INT_CONSTANT
+from src.y_operator.params import OM_small
 
 
-# TODO: om, tau, delta, xi can be changed to module of OM_eff, OM_eff_module should be calculated before main program
 def get_OM_eff(t, om, tau, delta, xi):
     om_eff = np.sqrt(2 * om ** 2 + delta ** 2)
     if t <= tau:
@@ -48,4 +47,3 @@ def get_Wz(t, om, tau, delta, xi):
     Wz_matrix[2, 1] = get_OM_eff(t, om, tau, delta, xi) / 2
     Wz_matrix[2, 2] = -DELTA_r
     return const_wz * z_ij_matrix * Wz_matrix
-

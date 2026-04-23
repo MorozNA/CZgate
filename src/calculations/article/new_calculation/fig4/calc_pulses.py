@@ -3,8 +3,8 @@ import numpy as np
 from src.algorithm.other_tools import get_U0_ideal, exact_evolution, get_rho_T0, construct_U0_for_trotter
 from calc_optimal_func import calc_optimal_om
 from src.algorithm.algorithm_fun_other import one_iteration
-from src.y_operator_deltaR.construct_Y import construct_Y_A, construct_Y_B
-from src.y_operator_deltaR.params import lambd_1, lambd_2, get_params
+from src.y_operator.construct_Y import construct_Y_A, construct_Y_B
+from src.y_operator.params import lambd_1, lambd_2, get_params
 
 
 T_muK = 5
@@ -51,11 +51,11 @@ if num_of_iter > 1:
     tau, delta, xi = get_params(om0, delta_R)
     U0_ideal = get_U0_ideal(tau, delta, xi)
     U01 = construct_U0_for_trotter(tau, om0, tau, delta, 0.0, delta_R)
-    YA1 = construct_Y_A(0.0, tau, om0, tau, delta, 0.0, delta_R, Q, n)
-    YB1 = construct_Y_B(0.0, tau, om0, tau, delta, 0.0, delta_R, Q, n)
+    YA1 = construct_Y_A(0.0, tau, om0, tau, delta, 0.0, Q, n, delta_R)
+    YB1 = construct_Y_B(0.0, tau, om0, tau, delta, 0.0, Q, n, delta_R)
     U02 = construct_U0_for_trotter(tau, om0, tau, delta, xi, delta_R)
-    YA2 = construct_Y_A(tau, 2 * tau, om0, tau, delta, xi, delta_R, Q, n)
-    YB2 = construct_Y_B(tau, 2 * tau, om0, tau, delta, xi, delta_R, Q, n)
+    YA2 = construct_Y_A(tau, 2 * tau, om0, tau, delta, xi, Q, n, delta_R)
+    YB2 = construct_Y_B(tau, 2 * tau, om0, tau, delta, xi, Q, n, delta_R)
     for i in range(num_of_iter-1):
         print('iter = ', i + 1, '\n')
         rho_elmotA_T0, rho_elmotB_T0, rho_el_T0, rho_T0_A, rho_T0_B = one_iteration(rho_elmotA_T0, rho_elmotB_T0, rho_el_T0, rho_T0_A, rho_T0_B, U01, YA1, YB1)
@@ -68,5 +68,5 @@ if num_of_iter > 1:
         rho_ideal0 = exact_evolution(rho_ideal0, U0_ideal)
 
 
-optimal_om = calc_optimal_om(om_left_MHz, om_right_MHz, Q, delta_R, rho_elmotA_T0, rho_elmotB_T0, rho_el_T0, rho_T0_A, rho_T0_B, rho_ideal0, num_of_iter, num_omegas, path)
+optimal_om = calc_optimal_om(om_left_MHz, om_right_MHz, Q, rho_elmotA_T0, rho_elmotB_T0, rho_el_T0, rho_T0_A, rho_T0_B, rho_ideal0, num_of_iter, num_omegas, delta_R, path)
 print(optimal_om / 2 / np.pi / 1e6)

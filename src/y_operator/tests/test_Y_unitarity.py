@@ -1,8 +1,8 @@
-from src.y_operator_deltaR.construct_Y import construct_Y_A, construct_Y_B, get_integral_atom_A, get_integral_atom_B
-from src.y_operator_deltaR.construct_Y import get_V1, get_V2, get_W0z, get_Wz
-from src.y_operator_deltaR.construct_Y import get_V1_vib, get_V2_vib, get_W0z_vib, get_Wz_vib
-from src.y_operator_deltaR.construct_Y import integrate_matrix_A, integrate_matrix_B
-from src.y_operator_deltaR.params import get_params
+from src.y_operator.construct_Y import construct_Y_A, construct_Y_B, get_integral_atom_A, get_integral_atom_B
+from src.y_operator.construct_Y import get_V1, get_V2, get_W0z, get_Wz
+from src.y_operator.construct_Y import get_V1_vib, get_V2_vib, get_W0z_vib, get_Wz_vib
+from src.y_operator.construct_Y import integrate_matrix_A, integrate_matrix_B
+from src.y_operator.params import get_params
 import numpy as np
 
 

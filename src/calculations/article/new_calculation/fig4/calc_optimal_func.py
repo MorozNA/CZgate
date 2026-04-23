@@ -3,11 +3,11 @@ from tqdm import tqdm
 from src.algorithm.other_tools import get_U0_ideal, exact_evolution, generalized_fidelity
 from src.algorithm.algorithm_fun_other import one_iteration
 from src.algorithm.other_tools import construct_U0_for_trotter
-from src.y_operator_deltaR.construct_Y import construct_Y_A, construct_Y_B
-from src.y_operator_deltaR.params import get_params
+from src.y_operator.construct_Y import construct_Y_A, construct_Y_B
+from src.y_operator.params import get_params
 
 
-def calc_optimal_om(om_left_MHz, om_right_MHz, Q, delta_R, rho_elmotA_T0, rho_elmotB_T0, rho_el_T0, rho_T0_A, rho_T0_B, rho_ideal0, num_of_iter, num_of_omegas, path='data/fidelities/'):
+def calc_optimal_om(om_left_MHz, om_right_MHz, Q, rho_elmotA_T0, rho_elmotB_T0, rho_el_T0, rho_T0_A, rho_T0_B, rho_ideal0, num_of_iter, num_of_omegas, delta_R=None, path='data/fidelities/'):
 
     n = len(rho_T0_A)
     om_left = 2 * np.pi * om_left_MHz * 1e6
@@ -28,12 +28,12 @@ def calc_optimal_om(om_left_MHz, om_right_MHz, Q, delta_R, rho_elmotA_T0, rho_el
 
         # EVOLUTION PROCESS
         U01 = construct_U0_for_trotter(tau, om, tau, delta, 0.0, delta_R)
-        YA1 = construct_Y_A(0.0, tau, om, tau, delta, 0.0, delta_R, Q, n)
-        YB1 = construct_Y_B(0.0, tau, om, tau, delta, 0.0, delta_R, Q, n)
+        YA1 = construct_Y_A(0.0, tau, om, tau, delta, 0.0, Q, n, delta_R)
+        YB1 = construct_Y_B(0.0, tau, om, tau, delta, 0.0, Q, n, delta_R)
 
         U02 = construct_U0_for_trotter(tau, om, tau, delta, xi, delta_R)
-        YA2 = construct_Y_A(tau, 2 * tau, om, tau, delta, xi, delta_R, Q, n)
-        YB2 = construct_Y_B(tau, 2 * tau, om, tau, delta, xi, delta_R, Q, n)
+        YA2 = construct_Y_A(tau, 2 * tau, om, tau, delta, xi, Q, n, delta_R)
+        YB2 = construct_Y_B(tau, 2 * tau, om, tau, delta, xi, Q, n, delta_R)
 
         # print('================================')
         # print('F(rho_el_T0,rho_ideal0) = ', generalized_fidelity(rho_el_T0, rho_ideal0))

@@ -1,10 +1,10 @@
 import numpy as np
 from tqdm import tqdm
 from src.algorithm.other_tools import get_rho_T0, get_U0_ideal, exact_evolution, generalized_fidelity
-from src.y_operator_deltaR.full_hamiltonian.get_evolution import get_evolution
-from src.y_operator_deltaR.construct_U0 import construct_U0
-from src.y_operator_deltaR.params import lambd_1, lambd_2
-from src.y_operator_deltaR.params import get_params
+from src.y_operator.full_hamiltonian.get_evolution import get_evolution
+from src.y_operator.construct_U0 import construct_U0
+from src.y_operator.params import lambd_1, lambd_2
+from src.y_operator.params import get_params
 
 
 path = 'data/data_b/'
@@ -44,7 +44,7 @@ rho_ideal = np.copy(rho_S0)
 
 # EVOLUTION OPERATORS
 print(9*n*n)
-U0_full = get_evolution(delta, om, xi, delta_R, tau, n, Q)
+U0_full = get_evolution(delta, om, xi, tau, n, Q, delta_R)
 U0 = construct_U0(t_final, om, tau, delta, xi, delta_R)
 
 
@@ -72,5 +72,5 @@ for i in tqdm(range(iterations)):
     fidelity_full.append(generalized_fidelity(rho_full_T0_spin, rho_ideal))
     fidelity_full_decomp.append(generalized_fidelity(rho_decomp_T0_spin, rho_ideal))
 
-np.savetxt(path + 'fidelity_full.txt', fidelity_full, fmt='%.18f')
-np.savetxt(path + 'fidelity_full_decomp.txt', fidelity_full_decomp, fmt='%.18f')
+# np.savetxt(path + 'fidelity_full.txt', fidelity_full, fmt='%.18f')
+# np.savetxt(path + 'fidelity_full_decomp.txt', fidelity_full_decomp, fmt='%.18f')

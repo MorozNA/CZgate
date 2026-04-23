@@ -51,11 +51,11 @@ rho_ideal = np.copy(rho_S0)
 
 # EVOLUTION OPERATORS
 U01 = construct_U0_for_trotter(tau, om, tau, delta, 0.0, delta_R)
-YA1 = construct_Y_A(0.0, tau, om, tau, delta, 0.0, delta_R, Q, n)
-YB1 = construct_Y_B(0.0, tau, om, tau, delta, 0.0, delta_R, Q, n)
+YA1 = construct_Y_A(0.0, tau, om, tau, delta, 0.0, Q, n, delta_R)
+YB1 = construct_Y_B(0.0, tau, om, tau, delta, 0.0, Q, n, delta_R)
 U02 = construct_U0_for_trotter(tau, om, tau, delta, xi, delta_R)
-YA2 = construct_Y_A(tau, 2 * tau, om, tau, delta, xi, delta_R, Q, n)
-YB2 = construct_Y_B(tau, 2 * tau, om, tau, delta, xi, delta_R, Q, n)
+YA2 = construct_Y_A(tau, 2 * tau, om, tau, delta, xi, Q, n, delta_R)
+YB2 = construct_Y_B(tau, 2 * tau, om, tau, delta, xi, Q, n, delta_R)
 n_operator = np.diag(np.arange(0, n))
 
 

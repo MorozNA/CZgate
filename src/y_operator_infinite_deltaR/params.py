@@ -18,6 +18,8 @@ z_r1 = np.pi * w01 ** 2 / lambd_1
 z_r2 = np.pi * w02 ** 2 / lambd_2
 p0z = np.sqrt(HBAR * M * OM_small / 2)  # kg * m / s; coeff '2' is saved here, but not used in momentum matrices
 Z_ast = 2 * z_r1 * z_r2 / (z_r1 + z_r2)
+# print(p0z, Z_ast)
+# print(HBAR / Z_ast / p0z * 1e6 * 200e-9)
 
 z_ij_matrix = np.zeros((3, 3), dtype=complex)
 z_ij_matrix[0, 0] = 1 / z_r1 ** 2
@@ -40,9 +42,9 @@ x_ij_matrix[2, 2] = 1 / w01 ** 2
 # n = 100
 
 
-from src.y_operator_deltaR.calc_params import calc_params
+from src.y_operator.calc_params import calc_params
 
 
-def get_params(om, delta_rydberg):
-    tau, delta, xi = calc_params(om, delta_rydberg)
+def get_params(om):
+    tau, delta, xi = calc_params(om)
     return tau, delta, xi

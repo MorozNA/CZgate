@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.linalg import sqrtm
-from src.y_operator_deltaR.params import HBAR, OM_small, kB
+from src.y_operator.params import HBAR, OM_small, kB
 
 
 def get_rho_T0(T, n):
@@ -42,7 +42,8 @@ def generalized_fidelity(rho, sigma):
     return np.clip(fidelity.real, 0.0, 1.0)
 
 
-from src.y_operator_deltaR.construct_U0 import get_U, get_U_deltaR, change_basis
+from src.y_operator.construct_U0 import get_U, get_U_deltaR
+from src.y_operator.change_basis import change_basis
 def construct_U0_for_trotter(t, om, tau, delta, xi, delta_rydberg):
     U1 = np.eye(9, dtype=complex)
     U1[1:3, 1:3] = get_U(delta, om, xi, t)
