@@ -2,7 +2,7 @@ import os
 import numpy as np
 from src.algorithm.other_tools import get_U0_ideal, exact_evolution, get_rho_T0, construct_U0_for_trotter
 from calc_optimal_func import calc_optimal_om
-from src.algorithm.algorithm_fun_other import one_iteration
+from src.algorithm.algorithm_fun import one_iteration_order2
 from src.y_operator.construct_Y import construct_Y_A, construct_Y_B
 from src.y_operator.params import lambd_1, lambd_2
 from src.y_operator.calc_params import calc_params
@@ -59,8 +59,8 @@ if num_of_iter > 1:
     YB2 = construct_Y_B(tau, 2 * tau, om0, tau, delta, xi, Q, n, delta_R)
     for i in range(num_of_iter-1):
         print('iter = ', i + 1, '\n')
-        rho_elmotA_T0, rho_elmotB_T0, rho_el_T0, rho_T0_A, rho_T0_B = one_iteration(rho_elmotA_T0, rho_elmotB_T0, rho_el_T0, rho_T0_A, rho_T0_B, U01, YA1, YB1)
-        rho_elmotA_T0, rho_elmotB_T0, rho_el_T0, rho_T0_A, rho_T0_B = one_iteration(rho_elmotA_T0, rho_elmotB_T0, rho_el_T0, rho_T0_A, rho_T0_B, U02, YA2, YB2)
+        rho_elmotA_T0, rho_elmotB_T0, rho_el_T0, rho_T0_A, rho_T0_B = one_iteration_order2(rho_elmotA_T0, rho_elmotB_T0, rho_el_T0, rho_T0_A, rho_T0_B, U01, YA1, YB1)
+        rho_elmotA_T0, rho_elmotB_T0, rho_el_T0, rho_T0_A, rho_T0_B = one_iteration_order2(rho_elmotA_T0, rho_elmotB_T0, rho_el_T0, rho_T0_A, rho_T0_B, U02, YA2, YB2)
         rho_elmotA_T0 /= np.trace(rho_elmotA_T0)
         rho_elmotB_T0 /= np.trace(rho_elmotB_T0)
         rho_el_T0 /= np.trace(rho_el_T0)

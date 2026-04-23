@@ -1,7 +1,7 @@
 import numpy as np
 from tqdm import tqdm
 from src.algorithm.other_tools import get_U0_ideal, exact_evolution, generalized_fidelity
-from src.algorithm.algorithm_fun_other import one_iteration
+from src.algorithm.algorithm_fun import one_iteration_order2
 from src.algorithm.other_tools import construct_U0_for_trotter
 from src.y_operator.construct_Y import construct_Y_A, construct_Y_B
 from src.y_operator.calc_params import calc_params
@@ -37,8 +37,8 @@ def calc_optimal_om(om_left_MHz, om_right_MHz, Q, rho_elmotA_T0, rho_elmotB_T0, 
 
         # print('================================')
         # print('F(rho_el_T0,rho_ideal0) = ', generalized_fidelity(rho_el_T0, rho_ideal0))
-        rho_elmotA_T, rho_elmotB_T, rho_el_T, rho_T_A, rho_T_B = one_iteration(rho_elmotA_T0, rho_elmotB_T0, rho_el_T0, rho_T0_A, rho_T0_B, U01, YA1, YB1)
-        rho_elmotA_T, rho_elmotB_T, rho_el_T, rho_T_A, rho_T_B = one_iteration(rho_elmotA_T, rho_elmotB_T, rho_el_T, rho_T_A, rho_T_B, U02, YA2, YB2)
+        rho_elmotA_T, rho_elmotB_T, rho_el_T, rho_T_A, rho_T_B = one_iteration_order2(rho_elmotA_T0, rho_elmotB_T0, rho_el_T0, rho_T0_A, rho_T0_B, U01, YA1, YB1)
+        rho_elmotA_T, rho_elmotB_T, rho_el_T, rho_T_A, rho_T_B = one_iteration_order2(rho_elmotA_T, rho_elmotB_T, rho_el_T, rho_T_A, rho_T_B, U02, YA2, YB2)
         rho_el_T /= np.trace(rho_el_T)
         # print('F(rho_el_T0,rho_ideal0) = ', generalized_fidelity(rho_el_T0, rho_ideal0))
         # print('================================')
