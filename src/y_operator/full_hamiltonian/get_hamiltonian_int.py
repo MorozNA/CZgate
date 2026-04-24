@@ -1,59 +1,60 @@
 import numpy as np
-from src.y_operator.consctust_spin_matrices import get_V1, get_V2, get_W0z, get_Wz
-from src.y_operator.construct_vib_matrices import get_V1_vib, get_V2_vib, get_W0z_vib, get_Wz_vib
+from src.y_operator.config import YOperatorDerived
+from src.y_operator.internal import get_V1, get_V2, get_W0z, get_Wz
+from src.y_operator.motional import get_V1_mot, get_V2_mot, get_W0z_mot, get_Wz_mot
 
 
-def get_HA(om, tau, delta, xi, n, q):
-    V1_spin = get_V1()
-    V1_vib = get_V1_vib(n)
+def get_HA(params: YOperatorDerived):
+    V1_int = get_V1(params)
+    V1_mot = get_V1_mot(params)
 
-    V2_spin = get_V2()
-    V2_vib = get_V2_vib(n, q)
+    V2_int = get_V2(params)
+    V2_mot = get_V2_mot(params)
 
-    W0z_spin = get_W0z(2.0 * tau, om, tau, delta, xi)
-    W0z_vib = get_W0z_vib(n)
+    W0z_int = get_W0z(params, 2.0 * params.tau)
+    W0z_mot = get_W0z_mot(params)
 
-    Wz_spin = get_Wz(2.0 * tau, om, tau, delta, xi)
-    Wz_vib = get_Wz_vib(n)
+    Wz_int = get_Wz(params, 2.0 * params.tau)
+    Wz_mot = get_Wz_mot(params)
 
-    V1_full = np.kron(V1_spin, np.eye(3))
-    V1_full = np.kron(V1_full, (np.kron(V1_vib, np.eye(n))))
+    V1_full = np.kron(V1_int, np.eye(3))
+    V1_full = np.kron(V1_full, (np.kron(V1_mot, np.eye(params.n))))
 
-    V2_full = np.kron(V2_spin, np.eye(3))
-    V2_full = np.kron(V2_full, (np.kron(V2_vib, np.eye(n))))
+    V2_full = np.kron(V2_int, np.eye(3))
+    V2_full = np.kron(V2_full, (np.kron(V2_mot, np.eye(params.n))))
 
-    W0z_full = np.kron(W0z_spin, np.eye(3))
-    W0z_full = np.kron(W0z_full, (np.kron(W0z_vib, np.eye(n))))
+    W0z_full = np.kron(W0z_int, np.eye(3))
+    W0z_full = np.kron(W0z_full, (np.kron(W0z_mot, np.eye(params.n))))
 
-    Wz_full = np.kron(Wz_spin, np.eye(3))
-    Wz_full = np.kron(Wz_full, (np.kron(Wz_vib, np.eye(n))))
+    Wz_full = np.kron(Wz_int, np.eye(3))
+    Wz_full = np.kron(Wz_full, (np.kron(Wz_mot, np.eye(params.n))))
 
     return V1_full + V2_full + W0z_full + Wz_full
 
 
-def get_HB(om, tau, delta, xi, n, q):
-    V1_spin = get_V1()
-    V1_vib = get_V1_vib(n)
+def get_HB(params: YOperatorDerived):
+    V1_int = get_V1(params)
+    V1_mot = get_V1_mot(params)
 
-    V2_spin = get_V2()
-    V2_vib = get_V2_vib(n, q)
+    V2_int = get_V2(params)
+    V2_mot = get_V2_mot(params)
 
-    W0z_spin = get_W0z(2.0 * tau, om, tau, delta, xi)
-    W0z_vib = get_W0z_vib(n)
+    W0z_int = get_W0z(params, 2.0 * params.tau)
+    W0z_mot = get_W0z_mot(params)
 
-    Wz_spin = get_Wz(2.0 * tau, om, tau, delta, xi)
-    Wz_vib = get_Wz_vib(n)
+    Wz_int = get_Wz(params, 2.0 * params.tau)
+    Wz_mot = get_Wz_mot(params)
 
-    V1_full = np.kron(np.eye(3), V1_spin)
-    V1_full = np.kron(V1_full, (np.kron(np.eye(n), V1_vib)))
+    V1_full = np.kron(np.eye(3), V1_int)
+    V1_full = np.kron(V1_full, (np.kron(np.eye(params.n), V1_mot)))
 
-    V2_full = np.kron(np.eye(3), V2_spin)
-    V2_full = np.kron(V2_full, (np.kron(np.eye(n), V2_vib)))
+    V2_full = np.kron(np.eye(3), V2_int)
+    V2_full = np.kron(V2_full, (np.kron(np.eye(params.n), V2_mot)))
 
-    W0z_full = np.kron(np.eye(3), W0z_spin)
-    W0z_full = np.kron(W0z_full, (np.kron(np.eye(n), W0z_vib)))
+    W0z_full = np.kron(np.eye(3), W0z_int)
+    W0z_full = np.kron(W0z_full, (np.kron(np.eye(params.n), W0z_mot)))
 
-    Wz_full = np.kron(np.eye(3), Wz_spin)
-    Wz_full = np.kron(Wz_full, (np.kron(np.eye(n), Wz_vib)))
+    Wz_full = np.kron(np.eye(3), Wz_int)
+    Wz_full = np.kron(Wz_full, (np.kron(np.eye(params.n), Wz_mot)))
 
     return V1_full + V2_full + W0z_full + Wz_full

@@ -4,7 +4,7 @@ from matplotlib.lines import Line2D
 from matplotlib.patches import Patch
 from matplotlib.ticker import LogLocator, NullFormatter
 
-from src.y_operator_deltaR.params import HBAR, OM_small, kB
+from src.y_operator.constants import HBAR, OM_small, kB
 from src.algorithm.other_tools import get_rho_T0
 
 # ------------------------------------------------------------

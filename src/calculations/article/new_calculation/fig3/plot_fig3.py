@@ -102,9 +102,9 @@ ax.legend(
     bbox_to_anchor=(0.07, 0.07)  # (x, y) in axes coords
 )
 
-fig.savefig(path + "figure2_fN_points_fit.png",
+fig.savefig(path + "figure3.png",
             bbox_inches="tight", facecolor="white")
-fig.savefig(path + "figure2_fN_points_fit.pdf",
+fig.savefig(path + "figure3.pdf",
             bbox_inches="tight", facecolor="white")
 
 plt.show()

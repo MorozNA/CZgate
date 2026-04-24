@@ -3,7 +3,6 @@ import numpy as np
 
 def calculate_YrhoY(rho_S0, rho_T0X, Y_X):
     n = len(rho_T0X)
-    " Trace is taken in algorithm program "
     Y_X_reshaped = Y_X.reshape(9, n, 9, n)  # np.kron(a_ij, b_kl) + reshape(i,k,j,l) = ij,kl->ikjl
     YrhoY_tensor = np.einsum(
         'iajb,jbkc,kcld->iald',
@@ -22,14 +21,12 @@ def one_iteration_order1(rho_S0, rho_T0A, rho_T0B, U0, Y_A, Y_B):
     rho_SA = np.einsum('iaja->ij', YA_rhoS0rhoT0A_YA)
     rho_SB = np.einsum('iaja->ij', YB_rhoS0rhoT0A_YB)
 
-
     YA_rhoSBrhoT0A_YA = calculate_YrhoY(rho_SB, rho_T0A, Y_A)
     YB_rhoSArhoT0B_YB = calculate_YrhoY(rho_SA, rho_T0B, Y_B)
 
     rho_S1 = U0 @ np.einsum('iaja->ij', YA_rhoSBrhoT0A_YA) @ U0.conj().T
     rho_S2 = U0 @ np.einsum('iaja->ij', YB_rhoSArhoT0B_YB) @ U0.conj().T
     rho_S = (rho_S1 + rho_S2) / 2
-
 
     rho_TA = np.einsum('iaib->ab', YA_rhoSBrhoT0A_YA)
     rho_TB = np.einsum('iaib->ab', YB_rhoSArhoT0B_YB)

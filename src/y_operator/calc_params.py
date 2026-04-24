@@ -19,7 +19,6 @@ def calc_xi(delta, omega, tau):
     arg = om_0 * tau / 2
     val1 = np.cos(arg) - 1j * delta / om_0 * np.sin(arg)
     val2 = np.cos(arg) + 1j * delta / om_0 * np.sin(arg)
-    # (- val1 / val2) * np.exp(1j * delta * tau) # TODO: compare with LP-article
     return np.angle(- val1 / val2)
 
 
