@@ -7,11 +7,13 @@ from src.y_operator.config import YOperatorConfig, build_derived
 
 
 # calculation parameters
-Q_INT = 1.0
-W_INT = 1.0
-path = 'data/data_a/'
 temperature0 = 1e-6
+n = 30
 iterations = 30
+temp_name = 1
+Q_INT = 1.0
+W_INT = 0.0
+path = 'data/data_b/'
 
 
 # configuration parameters
@@ -19,7 +21,7 @@ cfg = YOperatorConfig(
     Q_INT_CONSTANT=Q_INT,
     W_INT_CONSTANT=W_INT,
     om_hz=5e6,
-    n=30
+    n=n
 )
 params = build_derived(cfg)
 print(r'$\tau$ = ', params.tau)
@@ -50,26 +52,25 @@ U0_ideal = get_U0_ideal(params)
 
 # DATA LISTS
 fidelity_full = []
-fidelity_full_decomp = []
-purity = []
+# fidelity_full_decomp = []
 
 
 for i in tqdm(range(iterations)):
     rho_full_T0 = exact_evolution(rho_full_T0, U0_full)
-    rho_decomp_T0 = exact_evolution(rho_decomp_T0, U0_full)
+    # rho_decomp_T0 = exact_evolution(rho_decomp_T0, U0_full)
 
     rho_full_T0_spin = np.einsum('ikjk->ij', rho_full_T0.reshape(9, params.n**2, 9, params.n**2))
 
-    rho_decomp_T0_spin = np.einsum('ikjk->ij', rho_decomp_T0.reshape(9, params.n ** 2, 9, params.n ** 2))
-    rho_decomp_T0_vib = np.einsum('ikil->kl', rho_decomp_T0.reshape(9, params.n**2, 9, params.n**2))
-    rho_decomp_T0 = np.kron(rho_decomp_T0_spin, rho_decomp_T0_vib)
+    # rho_decomp_T0_spin = np.einsum('ikjk->ij', rho_decomp_T0.reshape(9, params.n ** 2, 9, params.n ** 2))
+    # rho_decomp_T0_vib = np.einsum('ikil->kl', rho_decomp_T0.reshape(9, params.n**2, 9, params.n**2))
+    # rho_decomp_T0 = np.kron(rho_decomp_T0_spin, rho_decomp_T0_vib)
 
     # IDEAL SPIN DENSITY MATRIX EVOLUTION
     rho_ideal = exact_evolution(rho_ideal, U0_ideal)
 
     # Save info
     fidelity_full.append(generalized_fidelity(rho_full_T0_spin, rho_ideal))
-    fidelity_full_decomp.append(generalized_fidelity(rho_decomp_T0_spin, rho_ideal))
+    # fidelity_full_decomp.append(generalized_fidelity(rho_decomp_T0_spin, rho_ideal))
 
 np.savetxt(path + 'fidelity_full.txt', fidelity_full, fmt='%.18f')
-np.savetxt(path + 'fidelity_full_decomp.txt', fidelity_full_decomp, fmt='%.18f')
+# np.savetxt(path + 'fidelity_full_decomp.txt', fidelity_full_decomp, fmt='%.18f')

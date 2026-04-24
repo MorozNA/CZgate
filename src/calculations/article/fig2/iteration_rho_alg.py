@@ -10,8 +10,11 @@ from dataclasses import replace
 
 # calculation parameters
 temperature0 = 1e-6
+n = 30
 iterations = 30
 temp_name = 1
+Q_INT = 1.0
+W_INT = 1.0
 path = 'data/data_a/'
 
 
@@ -21,18 +24,18 @@ cfg = YOperatorConfig(
     DELTA_b_hz=-2.5e6,
     DELTA_r_hz=-2.5e6,
 
-    W_INT_CONSTANT=1.0,
+    W_INT_CONSTANT=W_INT,
     w01=10e-6,
     w02=10e-6,
 
-    Q_INT_CONSTANT=1.0,
+    Q_INT_CONSTANT=Q_INT,
     lambd_1=795e-9,
     lambd_2=480e-9,
     OM_small_hz=7.158e3,
 
     om_hz=5e6,
     delta_rydberg_hz=50e6,
-    n=30
+    n=n
 )
 params = build_derived(cfg)
 
@@ -56,7 +59,7 @@ rho_ideal = np.copy(rho_S0)
 # EVOLUTION OPERATORS
 print("=================================================================")
 # TODO: rewrite U0_ideal function
-U0_ideal = get_U0_ideal(params.tau, params.delta, params.xi)
+U0_ideal = get_U0_ideal(params)
 
 params_xi0 = replace(params, xi=0.0)
 U01 = construct_U0k(params_xi0, params.tau)

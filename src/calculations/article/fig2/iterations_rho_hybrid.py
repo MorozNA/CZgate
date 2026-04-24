@@ -10,18 +10,20 @@ from dataclasses import replace
 
 # calculation parameters
 temperature0 = 1e-6
+n = 30
 iterations = 30
 temp_name = 1
+Q_INT = 1.0
+W_INT = 1.0
 path = 'data/data_a/'
 
 
 # configuration parameters
 cfg = YOperatorConfig(
-    W_INT_CONSTANT=1.0,
-    Q_INT_CONSTANT=1.0,
+    W_INT_CONSTANT=W_INT,
+    Q_INT_CONSTANT=Q_INT,
     om_hz=5e6,
-    delta_rydberg_hz=50e6,
-    n=30
+    n=n
 )
 params = build_derived(cfg)
 

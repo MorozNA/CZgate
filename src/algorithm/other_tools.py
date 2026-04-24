@@ -17,8 +17,8 @@ def get_rho_T0(params: YOperatorDerived, T):
     return rho_T0 / np.trace(rho_T0)
 
 
-def get_U0_ideal(tau, delta, xi):
-    phi1 = delta * tau + xi + np.pi
+def get_U0_ideal(params: YOperatorDerived):
+    phi1 = params.delta * params.tau + params.xi + np.pi
     phi2 = 2 * phi1 - np.pi
     # phi2 = delta * tau
     return np.diag([1.0, np.exp(1j * phi1), 1.0, np.exp(1j * phi1), np.exp(1j * phi2), 1.0, 1.0, 1.0, 1.0])
