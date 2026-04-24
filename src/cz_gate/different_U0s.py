@@ -4,7 +4,6 @@ from scipy.optimize import fsolve
 
 def get_U_perfect(delta, omega, xi, t):
     om_0 = np.sqrt(omega ** 2 + delta ** 2)
-    # TODO: проверить не отличается ли матрица сменой базисных векторов (rr <-> bb, rb <-> br)
     Ubb = (np.cos(om_0 * t / 2) - 1j * delta / om_0 * np.sin(om_0 * t / 2)) * np.exp(1j * delta * t / 2)
     Ubr = 1j * omega / om_0 * np.sin(om_0 * t / 2) * np.exp(-1j * xi + 1j * delta * t / 2)
     Urb = 1j * omega / om_0 * np.sin(om_0 * t / 2) * np.exp(1j * xi - 1j * delta * t / 2)
@@ -37,7 +36,7 @@ def to_solve(delta):
     tau = calc_tau(delta, om)
     xi = calc_xi(delta, om, tau)
     phi1 = np.pi - xi
-    phi1 = np.angle(np.exp(1j * phi1))  # так fsolve работает, видимо потому что угол сидит в промежутке (-pi, pi]
+    phi1 = np.angle(np.exp(1j * phi1))  # to ensure that phi is in the (-pi, pi] interval
     phi2 = -delta * tau
     return (phi2 - np.pi) / 2 - phi1
 

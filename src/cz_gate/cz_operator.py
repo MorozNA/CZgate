@@ -9,8 +9,8 @@ tau = calc_tau(delta, om, delta_R)
 xi2 = calc_xi(delta, om, tau)
 print('xi2 + pi =', xi2 + np.pi)
 
-# xi2 = 2.380762 # Leonid
-# xi2 = 3.90242 # Lukin
+# xi2 = 2.380762 # DOI: https://doi.org/10.1103/PhysRevA.106.042410
+# xi2 = 3.90242 # DOI: https://doi.org/10.1103/PhysRevLett.123.170503
 
 U1 = np.zeros((9, 9), dtype=complex)
 U2 = np.zeros((9, 9), dtype=complex)
