@@ -56,7 +56,7 @@ if num_of_iter > 1:
 
     cfg_iter = replace(cfg_iter, om_hz=float(om0 / (2 * np.pi)))
     params_iter = build_derived(cfg_iter)
-    U0_ideal = get_U0_ideal(params_iter.tau, params_iter.delta, params_iter.xi)
+    U0_ideal = get_U0_ideal(params_iter)
     U01 = construct_U0k(replace(params_iter, xi=0.0), params_iter.tau)
     YA1 = construct_Y_A(replace(params_iter, xi=0.0), 0.0, params_iter.tau)
     YB1 = construct_Y_B(replace(params_iter, xi=0.0), 0.0, params_iter.tau)

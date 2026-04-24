@@ -43,7 +43,7 @@ def calc_optimal_om(cfg: YOperatorConfig, om_left_MHz, om_right_MHz, rho_elmotA_
         # print('================================')
 
         # CALCULATING FIDELITY
-        U0_ideal = get_U0_ideal(params_om.tau, params_om.delta, params_om.xi)
+        U0_ideal = get_U0_ideal(params_om)
         rho_ideal = exact_evolution(rho_ideal0, U0_ideal)
 
         # SAVING INFORMATION

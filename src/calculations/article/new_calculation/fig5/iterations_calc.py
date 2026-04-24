@@ -4,29 +4,31 @@ from tqdm import tqdm
 from linear_regression import fit_temperature
 from src.algorithm.other_tools import get_rho_T0
 from src.algorithm.algorithm_fun import one_iteration_order2
-from src.algorithm.other_tools import construct_U0_for_trotter
+from src.y_operator.construct_U0 import construct_U0k
 from src.y_operator.construct_Y import construct_Y_A, construct_Y_B
-from src.y_operator.params import lambd_1, lambd_2
-from src.y_operator.calc_params import calc_params
+from src.y_operator.config import YOperatorConfig, build_derived
+from dataclasses import replace
 
 
+# calculation parameters
 T_muK = 1.8
 n = 250
 path = f'data/T{T_muK}/n{n}/'
 os.makedirs(path, exist_ok=True)
-
-# INITIAL PARAMETERS
 temperature = T_muK * 1e-6
-om = 2 * np.pi * 5e6
 iterations = 100
 
 
-Q = 2 * np.pi * (1 / lambd_2 - 1 / lambd_1)
-delta_R = 2 * np.pi * 50e6
-tau, delta, xi = calc_params(om, delta_R)
-t_initial = 0.0
-t_final = 2 * tau
-print('Tau = ', tau / 1e-9, ' ns')
+# configuration parameters
+cfg = YOperatorConfig(
+    W_INT_CONSTANT=1.0,
+    Q_INT_CONSTANT=1.0,
+    om_hz=5e6,
+    delta_rydberg_hz=50e6,
+    n=n
+)
+params = build_derived(cfg)
+print('Tau = ', params.tau / 1e-9, ' ns')
 
 
 # INITIAL STATES
@@ -50,20 +52,20 @@ rho_ideal = np.copy(rho_S0)
 
 
 # EVOLUTION OPERATORS
-U01 = construct_U0_for_trotter(tau, om, tau, delta, 0.0, delta_R)
-YA1 = construct_Y_A(0.0, tau, om, tau, delta, 0.0, Q, n, delta_R)
-YB1 = construct_Y_B(0.0, tau, om, tau, delta, 0.0, Q, n, delta_R)
-U02 = construct_U0_for_trotter(tau, om, tau, delta, xi, delta_R)
-YA2 = construct_Y_A(tau, 2 * tau, om, tau, delta, xi, Q, n, delta_R)
-YB2 = construct_Y_B(tau, 2 * tau, om, tau, delta, xi, Q, n, delta_R)
-n_operator = np.diag(np.arange(0, n))
+U01 = construct_U0k(replace(params, xi=0.0), params.tau)
+YA1 = construct_Y_A(replace(params, xi=0.0), 0.0, params.tau)
+YB1 = construct_Y_B(replace(params, xi=0.0), 0.0, params.tau)
+U02 = construct_U0k(params, params.tau)
+YA2 = construct_Y_A(params, params.tau, 2 * params.tau)
+YB2 = construct_Y_B(params, params.tau, 2 * params.tau)
+n_operator = np.diag(np.arange(0, params.n))
 
 
 # DATA LISTS
-density_matrix_diagonals = np.zeros((iterations, n), dtype=float)
+density_matrix_diagonals = np.zeros((iterations, params.n), dtype=float)
 fitted_temperatures = []
 n_average = []
-fitted_density_matrices = np.zeros((iterations, n), dtype=float)
+fitted_density_matrices = np.zeros((iterations, params.n), dtype=float)
 
 
 for i in tqdm(range(iterations)):

@@ -50,8 +50,7 @@ rho_ideal = np.copy(rho_S0)
 
 # EVOLUTION OPERATORS
 print("=================================================================")
-# TODO: rewrite U0_ideal function
-U0_ideal = get_U0_ideal(params.tau, params.delta, params.xi)
+U0_ideal = get_U0_ideal(params)
 
 U01 = construct_U0k(replace(params, xi=0.0), params.tau)
 YA1 = construct_Y_A(replace(params, xi=0.0), 0.0, params.tau)

@@ -45,7 +45,7 @@ rho_ideal = np.copy(rho_S0)
 print(9*params.n*params.n)
 U0_full = get_evolution(params)
 U0 = construct_U0(params, 2 * params.tau)
-U0_ideal = get_U0_ideal(params.tau, params.delta, params.xi)
+U0_ideal = get_U0_ideal(params)
 
 
 # DATA LISTS
