@@ -1,7 +1,7 @@
 import numpy as np
 from tqdm import tqdm
 from src.algorithm.other_tools import get_rho_T0, get_U0_ideal, exact_evolution, generalized_fidelity
-from src.algorithm.other_tools import construct_U0_for_trotter
+from src.y_operator.construct_U0 import construct_U0k
 from src.algorithm.algorithm_fun import one_iteration_order2
 from src.y_operator.construct_Y import construct_Y_A, construct_Y_B
 from src.y_operator.config import YOperatorConfig, build_derived
@@ -59,12 +59,11 @@ print("=================================================================")
 U0_ideal = get_U0_ideal(params.tau, params.delta, params.xi)
 
 params_xi0 = replace(params, xi=0.0)
-# TODO: get rid of trotter function
-U01 = construct_U0_for_trotter(params_xi0, params.tau)
+U01 = construct_U0k(params_xi0, params.tau)
 YA1 = construct_Y_A(params_xi0, 0.0, params.tau)
 YB1 = construct_Y_B(params_xi0, 0.0, params.tau)
 
-U02 = construct_U0_for_trotter(params, params.tau)
+U02 = construct_U0k(params, params.tau)
 YA2 = construct_Y_A(params, params.tau, 2 * params.tau)
 YB2 = construct_Y_B(params, params.tau, 2 * params.tau)
 print("=================================================================")

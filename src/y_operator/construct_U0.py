@@ -33,56 +33,26 @@ def get_U_deltaR(params: YOperatorDerived, t):
     return U_delta
 
 
-
-# TODO: write comments to justify p_xi0 and other parameters or completely change the structure of the functions
-def construct_U0(params: YOperatorDerived, t):
+def construct_U0k(params, t):
     use_deltaR = params.delta_rydberg is not None
 
-    p_xi0_om = replace(params, xi=0.0)
-    p_xi0_sqrt2om = replace(params, xi=0.0, om=np.sqrt(2)*params.om)
-    p_sqrt2om = replace(params, om=np.sqrt(2)*params.om)
-
-    if t <= params.tau:
-        U1 = np.eye(9, dtype=complex)
-        U1[1:3, 1:3] = get_U(p_xi0_om, t)
-        U1[3:5, 3:5] = get_U(p_xi0_om, t)
-
-        if use_deltaR:
-            U_deltaR1 = get_U_deltaR(p_xi0_om, t)
-            rows = [5, 6, 8]  # Target rows in U1
-            cols = [5, 6, 8]  # Target columns in U1
-            U1[np.ix_(rows, cols)] = U_deltaR1
-        else:
-            U1[5:7, 5:7] = get_U(p_xi0_sqrt2om, t)
-
-        return change_basis(U1)
-
     U1 = np.eye(9, dtype=complex)
-    U1[1:3, 1:3] = get_U(p_xi0_om, params.tau)
-    U1[3:5, 3:5] = get_U(p_xi0_om, params.tau)
+    U1[1:3, 1:3] = get_U(params, t)
+    U1[3:5, 3:5] = get_U(params, t)
 
     if use_deltaR:
-        U_deltaR1 = get_U_deltaR(p_xi0_om, params.tau)
+        U_deltaR1 = get_U_deltaR(params, t)
         rows = [5, 6, 8]  # Target rows in U1
         cols = [5, 6, 8]  # Target columns in U1
         U1[np.ix_(rows, cols)] = U_deltaR1
     else:
-        U1[5:7, 5:7] = get_U(p_xi0_sqrt2om, params.tau)
+        U1[5:7, 5:7] = get_U(replace(params, om=np.sqrt(2)*params.om), t)
+    return change_basis(U1)
 
 
-
-    U2 = np.eye(9, dtype=complex)
-    U2[1:3, 1:3] = get_U(params, t - params.tau)
-    U2[3:5, 3:5] = get_U(params, t - params.tau)
-
-    if use_deltaR:
-        U_deltaR2 = get_U_deltaR(params, t - params.tau)
-        rows = [5, 6, 8]  # Target rows in U1
-        cols = [5, 6, 8]  # Target columns in U1
-        U2[np.ix_(rows, cols)] = U_deltaR2
-    else:
-        U2[5:7, 5:7] = get_U(p_sqrt2om, t - params.tau)
-
-    if not np.allclose((U2 @ U1) @ (U2 @ U1).conj().T, np.eye(U2.shape[0])):
-        raise ValueError("Input matrix U2 is not unitary!")
-    return change_basis(U2 @ U1)
+def construct_U0(params: YOperatorDerived, t):
+    if t <= params.tau:
+        return construct_U0k(replace(params, xi=0.0), t)
+    U1 = construct_U0k(replace(params, xi=0.0), params.tau)
+    U2 = construct_U0k(params, t - params.tau)
+    return U2 @ U1
