@@ -2,32 +2,36 @@ import numpy as np
 from dataclasses import dataclass
 from src.y_operator.constants import HBAR, M
 from src.y_operator.calc_params import calc_params
+from typing import Optional
+
 
 @dataclass
 class YOperatorConfig:
-    # values user can tweak (in Hz / meters etc.)
     DELTA_b_hz: float = -2.5e6
     DELTA_r_hz: float = -2.5e6
     DELTA_a_hz: float = -0.7e6
 
-    W_INT_CONSTANT: float = 1.0
+    # W_INT_CONSTANT: float = 1.0
+    W_INT_FLAG: bool = True
     w01: float = 10e-6
     w02: float = 10e-6
 
-    Q_INT_CONSTANT: float = 1.0
+    # Q_INT_CONSTANT: float = 1.0
+    Q_INT_FLAG: bool = True
     lambd_1: float = 795e-9
     lambd_2: float = 480e-9
     OM_small_hz: float = 7.158e3
 
     om_hz: float = 5e6
-    delta_rydberg_hz: float | None = 50e6
+    delta_rydberg_hz: Optional[float] = 50e6
     n: int = 30
 
 
 @dataclass
 class YOperatorDerived:
-    Q_INT_CONSTANT: float
-    W_INT_CONSTANT: float
+    # Q_INT_CONSTANT: float
+    # W_INT_CONSTANT: float
+    eff_dict: dict
     OM_small: float
     DELTA_a: float
     DELTA_b: float
@@ -37,14 +41,21 @@ class YOperatorDerived:
     z_ij_matrix: np.ndarray
     x_ij_matrix: np.ndarray
     q: float
-    delta_rydberg: float | None
+    delta_rydberg: Optional[float]
     om: float
     tau: float
     delta: float
     xi: float
     n: int
 
+
 def build_derived(cfg: YOperatorConfig) -> YOperatorDerived:
+    eff_dict = {
+        "always": True,
+        "Q": cfg.Q_INT_FLAG,
+        "W": cfg.W_INT_FLAG
+    }
+
     OM_small = 2 * np.pi * cfg.OM_small_hz
     DELTA_b = 2 * np.pi * cfg.DELTA_b_hz
     DELTA_r = 2 * np.pi * cfg.DELTA_r_hz
@@ -79,10 +90,10 @@ def build_derived(cfg: YOperatorConfig) -> YOperatorDerived:
     om = 2 * np.pi * cfg.om_hz
     tau, delta, xi = calc_params(om, delta_rydberg)
 
-
     return YOperatorDerived(
-        Q_INT_CONSTANT=cfg.Q_INT_CONSTANT,
-        W_INT_CONSTANT=cfg.W_INT_CONSTANT,
+        # Q_INT_CONSTANT=cfg.Q_INT_CONSTANT,
+        # W_INT_CONSTANT=cfg.W_INT_CONSTANT,
+        eff_dict=eff_dict,
         OM_small=OM_small,
         DELTA_a=DELTA_a,
         DELTA_b=DELTA_b,

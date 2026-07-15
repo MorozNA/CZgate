@@ -18,8 +18,8 @@ def get_V2_mot(params: YOperatorDerived):
     p1_1 = np.diag(np.sqrt(nu[1::]), 1)
     p1_2 = np.diag(np.sqrt(nu[1::]), -1)
     p1 = (p1_1 - p1_2) * (-1j)
-    term1 = 2 * (HBAR * (params.q * params.Q_INT_CONSTANT) / params.p0z) * p1
-    term2 = (HBAR * (params.q * params.Q_INT_CONSTANT) / params.p0z) ** 2 * np.eye(params.n, dtype=complex)
+    term1 = 2 * (HBAR * params.q / params.p0z) * p1
+    term2 = (HBAR * params.q / params.p0z) ** 2 * np.eye(params.n, dtype=complex)
     return term1 + term2
 
 

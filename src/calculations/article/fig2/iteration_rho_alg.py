@@ -13,8 +13,8 @@ temperature0 = 1e-6
 n = 30
 iterations = 30
 temp_name = 1
-Q_INT = 1.0
-W_INT = 1.0
+Q_INT_FLAG = True
+W_INT_FLAG = True
 path = 'data/data_a/'
 
 
@@ -24,11 +24,11 @@ cfg = YOperatorConfig(
     DELTA_b_hz=-2.5e6,
     DELTA_r_hz=-2.5e6,
 
-    W_INT_CONSTANT=W_INT,
+    W_INT_FLAG=W_INT_FLAG,
     w01=10e-6,
     w02=10e-6,
 
-    Q_INT_CONSTANT=Q_INT,
+    Q_INT_FLAG=Q_INT_FLAG,
     lambd_1=795e-9,
     lambd_2=480e-9,
     OM_small_hz=7.158e3,

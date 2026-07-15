@@ -1,6 +1,18 @@
 import numpy as np
 from scipy.stats import linregress
-from src.y_operator.params import kB, HBAR, OM_small
+from src.y_operator.constants import kB, HBAR
+from src.y_operator.config import YOperatorConfig, build_derived
+
+
+n = 250
+# configuration parameters
+cfg = YOperatorConfig(
+    om_hz=5e6,
+    delta_rydberg_hz=50e6,
+    n=n
+)
+params = build_derived(cfg)
+OM_small = params.OM_small
 
 
 def fit_temperature(density_matrix_diagonal):

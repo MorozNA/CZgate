@@ -21,8 +21,6 @@ iterations = 100
 
 # configuration parameters
 cfg = YOperatorConfig(
-    W_INT_CONSTANT=1.0,
-    Q_INT_CONSTANT=1.0,
     om_hz=5e6,
     delta_rydberg_hz=50e6,
     n=n
@@ -36,7 +34,7 @@ if T_muK==0:
     rho_T0 = np.zeros((n, n), dtype=complex)
     rho_T0[0, 0] = 1.0
 else:
-    rho_T0 = get_rho_T0(temperature, n)
+    rho_T0 = get_rho_T0(params, temperature)
 
 rho_S0 = np.zeros((9, 9), dtype=complex)
 idx = [0, 1, 3, 4]
