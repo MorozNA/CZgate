@@ -46,3 +46,10 @@ def get_Wz(params: YOperatorDerived, t):
     Wz_matrix[2, 2] = -params.DELTA_r
     return const_wz * params.z_ij_matrix * Wz_matrix
 
+
+def get_vdW(params: YOperatorDerived, t=None):
+    const_vdW_spin = - 6 * params.delta_rydberg
+    const_vdW_vib = np.sqrt(HBAR / M / params.OM_small) / params.r0
+    vdW_matrix = np.zeros((9, 9), dtype=complex)
+    vdW_matrix[-1, -1] = const_vdW_spin * const_vdW_vib
+    return vdW_matrix

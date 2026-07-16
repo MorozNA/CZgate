@@ -22,6 +22,10 @@ class YOperatorConfig:
     lambd_2: float = 480e-9
     OM_small_hz: float = 7.158e3
 
+    # vdW constants
+    vdW_INT_FLAG: bool = False
+    r0: float = 20e-6
+
     om_hz: float = 5e6
     delta_rydberg_hz: Optional[float] = 50e6
     n: int = 30
@@ -42,6 +46,7 @@ class YOperatorDerived:
     x_ij_matrix: np.ndarray
     q: float
     delta_rydberg: Optional[float]
+    r0: float
     om: float
     tau: float
     delta: float
@@ -53,7 +58,8 @@ def build_derived(cfg: YOperatorConfig) -> YOperatorDerived:
     eff_dict = {
         "always": True,
         "Q": cfg.Q_INT_FLAG,
-        "W": cfg.W_INT_FLAG
+        "W": cfg.W_INT_FLAG,
+        "vdW": cfg.vdW_INT_FLAG,
     }
 
     OM_small = 2 * np.pi * cfg.OM_small_hz
@@ -87,6 +93,8 @@ def build_derived(cfg: YOperatorConfig) -> YOperatorDerived:
     else:
         delta_rydberg = None
 
+    r0 = cfg.r0
+
     om = 2 * np.pi * cfg.om_hz
     tau, delta, xi = calc_params(om, delta_rydberg)
 
@@ -104,6 +112,7 @@ def build_derived(cfg: YOperatorConfig) -> YOperatorDerived:
         x_ij_matrix=x_ij,
         q=q,
         delta_rydberg=delta_rydberg,
+        r0=r0,
         om=om,
         tau=tau,
         delta=delta,

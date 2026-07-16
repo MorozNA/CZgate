@@ -1,8 +1,8 @@
 import numpy as np
 from src.y_operator.config import YOperatorDerived
 from src.y_operator.construct_U0 import construct_U0
-from src.y_operator.internal import get_V1, get_V2, get_W0z, get_Wz
-from src.y_operator.motional import get_V1_mot, get_V2_mot, get_W0z_mot, get_Wz_mot
+from src.y_operator.internal import get_V1, get_V2, get_W0z, get_Wz, get_vdW
+from src.y_operator.motional import get_V1_mot, get_V2_mot, get_W0z_mot, get_Wz_mot, get_vdW_mot
 from scipy.integrate import quad_vec
 from tqdm import tqdm
 
@@ -18,18 +18,26 @@ EFF_DICT = {
         ("W0z", get_W0z, get_W0z_mot),
         ("Wz", get_Wz, get_Wz_mot),
     ],
+    "vdW": [
+        ("vdW", get_vdW, get_vdW_mot),
+    ],
 }
 
 
 def get_integrand_A(params: YOperatorDerived, t, get_matrix):
     U0 = construct_U0(params, t)
     M = get_matrix(params, t)
+    if len(M)==9:
+        return U0 @ M @ U0.conj().T
     return U0 @ np.kron(M, np.eye(3)) @ U0.conj().T
 
 
 def get_integrand_B(params: YOperatorDerived, t, get_matrix):
     U0 = construct_U0(params, t)
     M = get_matrix(params, t)   # for functions like get_W0z, get_Wz
+    if len(M)==9:
+        # TODO: include the minus sign in other way
+        return -U0 @ M @ U0.conj().T
     return U0 @ np.kron(np.eye(3), M) @ U0.conj().T
 
 

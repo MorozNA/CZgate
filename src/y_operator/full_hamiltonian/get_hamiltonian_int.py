@@ -1,7 +1,7 @@
 import numpy as np
 from src.y_operator.config import YOperatorDerived
-from src.y_operator.internal import get_V1, get_V2, get_W0z, get_Wz
-from src.y_operator.motional import get_V1_mot, get_V2_mot, get_W0z_mot, get_Wz_mot
+from src.y_operator.internal import get_V1, get_V2, get_W0z, get_Wz, get_vdW
+from src.y_operator.motional import get_V1_mot, get_V2_mot, get_W0z_mot, get_Wz_mot, get_vdW_mot
 
 
 def get_HA(params: YOperatorDerived):
@@ -28,6 +28,11 @@ def get_HA(params: YOperatorDerived):
         Wz_int = np.kron(Wz_int, np.eye(3))
         Wz_mot = get_Wz_mot(params)
         HA_int += np.kron(Wz_int, (np.kron(Wz_mot, np.eye(params.n))))
+
+    if params.eff_dict["vdW"]:
+        vdW_int = get_vdW(params)
+        vdW_mot = np.kron(get_vdW_mot(params), np.eye(params.n))
+        HA_int += np.kron(vdW_int, vdW_mot)
 
     return HA_int
 
@@ -56,5 +61,11 @@ def get_HB(params: YOperatorDerived):
         Wz_int = np.kron(np.eye(3), Wz_int)
         Wz_mot = get_Wz_mot(params)
         HB_int += np.kron(Wz_int, (np.kron(np.eye(params.n), Wz_mot)))
+
+    if params.eff_dict["vdW"]:
+        # TODO: include minus sign elsewhere
+        vdW_int = get_vdW(params)
+        vdW_mot = np.kron(get_vdW_mot(params), np.eye(params.n))
+        HB_int -= np.kron(vdW_int, vdW_mot)
 
     return HB_int

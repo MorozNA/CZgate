@@ -36,3 +36,10 @@ def get_Wz_mot(params: YOperatorDerived):
     p2_2 = np.diag(np.sqrt(nu[2::] * (nu[2::] - 1)), 2)
     p2_3 = np.diag(np.sqrt(nu[2::] * (nu[2::] - 1)), -2)
     return -(p2_1 + p2_2 + p2_3)
+
+
+def get_vdW_mot(params: YOperatorDerived):
+    nu = np.arange(params.n)
+    x_1 = np.diag(np.sqrt(nu[1::]), 1)
+    x_2 = np.diag(np.sqrt(nu[1::]), -1)
+    return x_1 + x_2
