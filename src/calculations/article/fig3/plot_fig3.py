@@ -13,7 +13,7 @@ plt.rcParams.update({
     "figure.dpi": 300,
 })
 
-path = 'data/data_a/'
+path = 'data/w2/'
 fidelity1 = np.loadtxt(path + 'fidelity_1.txt')
 fidelity3 = np.loadtxt(path + 'fidelity_3.txt')
 fidelity5 = np.loadtxt(path + 'fidelity_5.txt')
@@ -88,11 +88,13 @@ ax.set_ylabel(r'$f_N = F_N / F_{N-1}$')
 
 ax.set_xlim(1 - 0.1, points_to_fit + 0.1)
 ax.set_xticks(np.arange(1, points_to_fit+1, 1))
-ymin = 0.9985
+
+ymin = 0.99889
 ymax = 1.0
-eps = 0.0001
+eps = 0.00004
 ax.set_ylim(ymin -  eps, ymax + eps)
-ax.set_yticks(np.linspace(ymin, ymax, 4))
+# ax.set_yticks(np.linspace(ymin, ymax, 4))
+ax.set_yticks([0.9990, 0.9995, 1.0])
 
 ax.grid(True, linestyle=':', linewidth=0.6, alpha=0.8)
 ax.tick_params(direction="in", which="both", top=True, right=True)

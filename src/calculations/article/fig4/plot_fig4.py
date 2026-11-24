@@ -17,7 +17,6 @@ ind_list = [1, 30, 50]
 
 def load_pg(path, ind_list):
     f_list, tau_list, opt_ind_list = [], [], []
-    fids_by_iter = np.loadtxt(path + 'fids_by_iters_1to50.txt')
     for ind in ind_list:
         f = np.loadtxt(path + f'fidelities_{ind}.txt')
         taus = np.loadtxt(path + f'taus_{ind}.txt') / 1e-9 * 2
@@ -25,13 +24,14 @@ def load_pg(path, ind_list):
         tau_list.append(taus)
         opt_ind_list.append(np.argmax(f))
     f_pg_list = [f_list[0]]
-    for i in range(len(ind_list) - 1):
-        f_pg_list.append(f_list[i+1] / fids_by_iter[ind_list[i+1] - 2])
+    for i, N in enumerate(ind_list[1:], start=1):
+        F_prev = np.loadtxt(path + f'fidelity_before_{N}.txt')
+        f_pg_list.append(f_list[i] / F_prev)
     return tau_list, f_pg_list, opt_ind_list
 
 # load data
-tau_cold, fpg_cold, opt_cold = load_pg('data/fidelities/T1/n50/om_2.4_15/', ind_list)
-tau_hot,  fpg_hot,  opt_hot  = load_pg('data/fidelities/T5/n200/om_2.4_15/', ind_list)
+tau_cold, fpg_cold, opt_cold = load_pg('data/w2/T1/n50/om_2.4_15/', ind_list)
+tau_hot,  fpg_hot,  opt_hot  = load_pg('data/w2/T5/n200/om_2.4_15/', ind_list)
 
 fig, ax = plt.subplots(figsize=(3.4, 2.4), constrained_layout=True)
 
@@ -123,7 +123,7 @@ for i, N in enumerate(ind_list):
 # ----- axes & legend -----
 ax.set_xlabel(r'$2\tau$ (ns)')
 ax.set_ylabel(r'$f_N$')
-ax.set_ylim(0.9805, 1.002)
+ax.set_ylim(0.982, 1.002)
 
 xmin = xmin_all
 xmax = xmax_all
@@ -145,10 +145,6 @@ ax.legend(
     handlelength=2.0
 )
 
-# fig.savefig('data/figure_cold_hot.png',
-#             bbox_inches="tight", facecolor="white")
-# fig.savefig('data/figure_cold_hot.pdf',
-#             bbox_inches="tight", facecolor="white")
-# fig.savefig('data/figure_cold_hot.svg',
-#             bbox_inches="tight", facecolor="white")
+fig.savefig("data/w2/figure4.pdf", bbox_inches="tight", facecolor="white")
+fig.savefig("data/w2/figure4.png", dpi=300, bbox_inches="tight", facecolor="white")
 plt.show()

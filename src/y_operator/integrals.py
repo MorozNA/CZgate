@@ -24,21 +24,23 @@ EFF_DICT = {
 }
 
 
-def get_integrand_A(params: YOperatorDerived, t, get_matrix):
-    U0 = construct_U0(params, t)
-    M = get_matrix(params, t)
-    if len(M)==9:
-        return U0 @ M @ U0.conj().T
-    return U0 @ np.kron(M, np.eye(3)) @ U0.conj().T
-
-
-def get_integrand_B(params: YOperatorDerived, t, get_matrix):
-    U0 = construct_U0(params, t)
+def get_integrand_A(params: YOperatorDerived, t, get_matrix, t_initial=0.0):
+    # Measure evolution from the start of this pulse, so U0 is the identity at t_initial
+    U0 = construct_U0(params, t) @ construct_U0(params, t_initial).conj().T  # for the second pulse U should start at the new initial time
     M = get_matrix(params, t)   # for functions like get_W0z, get_Wz
-    if len(M)==9:
-        # TODO: include the minus sign in other way
-        return -U0 @ M @ U0.conj().T
-    return U0 @ np.kron(np.eye(3), M) @ U0.conj().T
+    if M.shape == (3, 3):
+        M = np.kron(M, np.eye(3))
+    return U0.conj().T @ M @ U0
+
+
+def get_integrand_B(params: YOperatorDerived, t, get_matrix, t_initial=0.0):
+    U0 = construct_U0(params, t) @ construct_U0(params, t_initial).conj().T
+    M = get_matrix(params, t)   # for functions like get_W0z, get_Wz
+    if M.shape == (3, 3):
+        M = np.kron(np.eye(3), M)
+    if get_matrix is get_vdW:
+        M = -M
+    return U0.conj().T @ M @ U0
 
 
 def get_integrals_A(params: YOperatorDerived, t_initial, t_final, epsrel=1e-18):
@@ -48,7 +50,7 @@ def get_integrals_A(params: YOperatorDerived, t_initial, t_final, epsrel=1e-18):
         if params.eff_dict[key]:
             for name, func_spin, _ in term_list:
                 integrals[name], _ = quad_vec(
-                    lambda t, f=func_spin: get_integrand_A(params, t, f),
+                    lambda t, f=func_spin: get_integrand_A(params, t, f, t_initial),
                     t_initial,
                     t_final,
                     epsrel=epsrel,
@@ -63,7 +65,7 @@ def get_integrals_B(params: YOperatorDerived, t_initial, t_final, epsrel=1e-18):
         if params.eff_dict[key]:
             for name, func_spin, _ in term_list:
                 integrals[name], _ = quad_vec(
-                    lambda t, f=func_spin: get_integrand_B(params, t, f),
+                    lambda t, f=func_spin: get_integrand_B(params, t, f, t_initial),
                     t_initial,
                     t_final,
                     epsrel=epsrel,

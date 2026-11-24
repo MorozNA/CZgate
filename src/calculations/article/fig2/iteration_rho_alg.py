@@ -12,10 +12,11 @@ from dataclasses import replace
 temperature0 = 1e-6
 n = 30
 iterations = 30
+waist_um = 2
 temp_name = 1
 Q_INT_FLAG = True
 W_INT_FLAG = True
-path = 'data/data_a/'
+path = f'data/w{waist_um}/data_a/'
 
 
 # configuration parameters
@@ -25,8 +26,8 @@ cfg = YOperatorConfig(
     DELTA_r_hz=-2.5e6,
 
     W_INT_FLAG=W_INT_FLAG,
-    w01=10e-6,
-    w02=10e-6,
+    w01=waist_um*1e-6,
+    w02=waist_um*1e-6,
 
     Q_INT_FLAG=Q_INT_FLAG,
     lambd_1=795e-9,
@@ -58,7 +59,6 @@ rho_ideal = np.copy(rho_S0)
 
 # EVOLUTION OPERATORS
 print("=================================================================")
-# TODO: rewrite U0_ideal function
 U0_ideal = get_U0_ideal(params)
 
 params_xi0 = replace(params, xi=0.0)

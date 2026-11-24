@@ -37,6 +37,7 @@ def construct_U0k(params, t):
     use_deltaR = params.delta_rydberg is not None
 
     U1 = np.eye(9, dtype=complex)
+    U1[7, 7] = np.exp(1j * params.delta * t)
     U1[1:3, 1:3] = get_U(params, t)
     U1[3:5, 3:5] = get_U(params, t)
 

@@ -4,8 +4,9 @@ from matplotlib.lines import Line2D
 from matplotlib.patches import Patch
 from matplotlib.ticker import LogLocator, NullFormatter
 
-from src.y_operator.constants import HBAR, OM_small, kB
+from src.y_operator.constants import HBAR, kB
 from src.algorithm.other_tools import get_rho_T0
+from src.y_operator.config import YOperatorConfig, build_derived
 
 # ------------------------------------------------------------
 # Style
@@ -30,11 +31,35 @@ plt.rcParams.update({
 # ------------------------------------------------------------
 T_muK = 1
 n = 250
-path = f"data/T{T_muK}/n{n}/"
+waist_um = 2
+path = f"data/w{waist_um:g}/T{T_muK}/n{n}/"
+
+Q_INT_FLAG = True
+W_INT_FLAG = True
+# configuration parameters
+cfg = YOperatorConfig(
+    DELTA_a_hz=-0.7e6,
+    DELTA_b_hz=-2.5e6,
+    DELTA_r_hz=-2.5e6,
+
+    W_INT_FLAG=W_INT_FLAG,
+    w01=waist_um * 1e-6,
+    w02=waist_um * 1e-6,
+
+    Q_INT_FLAG=Q_INT_FLAG,
+    lambd_1=795e-9,
+    lambd_2=480e-9,
+    OM_small_hz=7.158e3,
+
+    om_hz=5e6,
+    delta_rydberg_hz=50e6,
+    n=n
+)
+params = build_derived(cfg)
 
 dms = np.loadtxt(path + f"dm_diags_T{T_muK}.txt")
 n_averages = np.loadtxt(path + f"n_avg_T{int(T_muK)}.txt")
-temps_n_avg = HBAR * OM_small * (n_averages + 0.5) / kB
+temps_n_avg = HBAR * params.OM_small * (n_averages + 0.5) / kB
 
 iter_nums = [1, 50, 100, 200]
 energy_levels = np.arange(n)
@@ -54,7 +79,7 @@ ev = energy_levels[:cutoff]
 bar_width = 0.85
 
 # Initial thermal at T0
-rho_th0 = get_rho_T0(T_muK * 1e-6, n)
+rho_th0 = get_rho_T0(params, T_muK * 1e-6)
 y0 = np.diag(rho_th0)[energy_levels[:cutoff]]
 
 # Numerical at iter_hist
@@ -62,7 +87,7 @@ y_num = dms[iter_hist - 1][energy_levels[:cutoff]]
 
 # Thermal fit at T_iter_hist
 T_fit_hist = temps_n_avg[iter_hist - 1]
-rho_th_hist = get_rho_T0(T_fit_hist, n)
+rho_th_hist = get_rho_T0(params, T_fit_hist)
 y_fit_hist = np.diag(rho_th_hist)[energy_levels[:cutoff]]
 
 # T0: gray background bars
@@ -122,7 +147,7 @@ ax_ins = ax.inset_axes([0.29, 0.32, 0.65, 0.6])  # position similar to PLOT2
 
 for i, it in enumerate(iter_nums):
     T_fit = temps_n_avg[it - 1]
-    rho_th = get_rho_T0(T_fit, n)
+    rho_th = get_rho_T0(params, T_fit)
 
     y_fit = np.diag(rho_th)[energy_levels]
     y_data = dms[it - 1][energy_levels]

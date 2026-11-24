@@ -13,8 +13,8 @@ class YOperatorConfig:
 
     # W_INT_CONSTANT: float = 1.0
     W_INT_FLAG: bool = True
-    w01: float = 10e-6
-    w02: float = 10e-6
+    w01: float = 2e-6
+    w02: float = 2e-6
 
     # Q_INT_CONSTANT: float = 1.0
     Q_INT_FLAG: bool = True
@@ -55,6 +55,11 @@ class YOperatorDerived:
 
 
 def build_derived(cfg: YOperatorConfig) -> YOperatorDerived:
+    if cfg.vdW_INT_FLAG:
+        if cfg.delta_rydberg_hz is None or not np.isfinite(cfg.delta_rydberg_hz):
+            raise ValueError("The spatial blockade gradient requires a finite delta_rydberg_hz.")
+        if not np.isfinite(cfg.r0) or cfg.r0 <= 0.0:
+            raise ValueError("The spatial blockade gradient requires r0 > 0 in meters.")
     eff_dict = {
         "always": True,
         "Q": cfg.Q_INT_FLAG,

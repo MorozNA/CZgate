@@ -1,5 +1,8 @@
+import matplotlib as mpl
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.font_manager import FontProperties
+from pathlib import Path
 
 # -----------------------------
 # Global matplotlib settings (APS style)
@@ -16,11 +19,13 @@ plt.rcParams.update({
     "figure.dpi": 300,
 })
 
+waist_um = 2
+path_save = f"data/w{waist_um}/"
 # -----------------------------
 # Helper function to load panel data
 # -----------------------------
 def load_data(effect_name):
-    path = "data/data_" + effect_name + "/"
+    path = path_save + "data_" + effect_name + "/"
 
     fidelity_alg = np.loadtxt(path + "fidelity_alg_pulse_1.txt")
     fidelity_no_motion = np.loadtxt(path + "fidelity_alg_pulse_0.txt")
@@ -38,14 +43,18 @@ def load_data(effect_name):
 
 # Names just to keep the order consistent
 curve_labels = [
-    r"$\rho_{\mathrm{full}}(t_N)$", r"$\rho(t_N)$", r"$\rho_{\mathrm{fac}}(t_N)$", r"$\rho_{in}(t_N)$", r"$1 - F^N$"]
-
+    "exact",
+    r"$(3.13)$",
+    r"$(3.17)$",
+    r"$(3.18)$",
+    r"$1 - F_1^N$",
+]
 # Example: style lists for panel (a)
 # colors_a = ["tab:red", "#08306b", "#1f5f9d", "#6baed6", "0.45"]
 # colors_a = ["magenta", "#08306b", "#1f5f9d", "#6baed6", "0.45"]
 # colors_a = ["magenta", "#08306b", "#2171b5", "#6baed6", "#9ecae1"]
-colors_a = ["magenta", "#08306b", "#174f7e", "#5287a6", "#7b9daf"]
-ls_a     = ["dashed", "solid", "dashed", "dashdot", "dotted"]
+colors_a = ["magenta", "#08306b", "#174f7e", "#5287a6", "0.45"]
+ls_a     = ["solid", "solid", "dashed", "dashdot", "dotted"]
 # lws_a    = [1.15, 1.15, 1.15, 1.15, 1.15]
 lws_a    = [0.9, 0.9, 0.9, 0.9, 0.9]
 alph_a   = [0.7, 0.95, 0.9, 1.0, 1.0]
@@ -93,9 +102,9 @@ def plot_panel(ax, effect_name, panel_label,
         )
 
     ax.set_xlim([-0.75, 30.75])
-    ax.set_ylim([-0.001, 0.044])
+    ax.set_ylim([-0.001, 0.036])
     ax.set_xticks([0, 10, 20, 30])
-    ax.set_yticks([0.00, 0.01, 0.02, 0.03, 0.04])
+    ax.set_yticks([0.00, 0.01, 0.02, 0.03])
     ax.tick_params(direction="in", which="both", top=True, right=True)
     ax.grid(True, linestyle=":", linewidth=0.5, alpha=0.35)
 
@@ -122,8 +131,8 @@ handles, labels = ax_a.get_legend_handles_labels()
 import copy
 handles[0] = copy.copy(handles[0])
 handles[0].set_linestyle('-')
-handles[0].set_dashes([3.3, 1.4, 3.3, 1.4])   # dash, gap, dot, gap
-handles[2] = copy.copy(handles[3])
+# handles[0].set_dashes([3.3, 1.4, 3.3, 1.4])   # dash, gap, dot, gap
+handles[2] = copy.copy(handles[2])
 handles[2].set_linestyle('-')
 handles[2].set_dashes([3.3, 1.4, 3.3, 1.4])   # dash, gap, dot, gap
 handles[3] = copy.copy(handles[3])
@@ -139,10 +148,12 @@ leg = ax_b.legend(handles, labels,
                   handlelength=1.3,
                   columnspacing=1.0,
                   borderpad=0.3,
-                  bbox_to_anchor=(0.75, 0.88))
+                  bbox_to_anchor=(0.68, 0.9))
 leg.get_frame().set_alpha(0.9)
+cmr10 = Path(mpl.get_data_path()) / "fonts" / "ttf" / "cmr10.ttf"
+leg.get_texts()[0].set_fontproperties(FontProperties(fname=cmr10, size=8.3))
 
 
-plt.savefig("data/full_figure_ab_clrs.pdf", bbox_inches="tight")
-plt.savefig("data/full_figure_ab_clrs.png", dpi=300, bbox_inches="tight")
+plt.savefig(path_save + "fig2.pdf", bbox_inches="tight")
+plt.savefig(path_save + "fig2.png", dpi=300, bbox_inches="tight")
 plt.show()

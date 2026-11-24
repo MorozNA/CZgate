@@ -8,19 +8,17 @@ from src.y_operator.config import YOperatorConfig, build_derived
 from dataclasses import replace
 
 
-path = 'data/data_a/'
-
-
 # calculation parameters
-temperature0 = 5e-6
+temperature0 = 1e-6
 iterations = 50
 n = 200
-# om = 2 * np.pi * 5e6
-# om = 2 * np.pi * 5.74457429048414 * 1e6  # 5 muK, n = 1
-# om = 2 * np.pi * 6.6701168614357265 * 1e6  # 5 muK, n = 30
+waist_um = 2
+path = f'data/w{waist_um}/'
 
 # configuration parameters
 cfg = YOperatorConfig(
+    w01=waist_um*1e-6,
+    w02=waist_um*1e-6,
     om_hz=5e6,
     delta_rydberg_hz=50e6,
     n=n

@@ -10,16 +10,19 @@ from src.y_operator.config import YOperatorConfig, build_derived
 temperature0 = 1e-6
 n = 30
 iterations = 30
+waist_um = 2
 temp_name = 1
 Q_INT_FLAG = True
 W_INT_FLAG = False
-path = 'data/data_b/'
+path = f'data/w{waist_um}/data_b/'
 
 
 # configuration parameters
 cfg = YOperatorConfig(
     Q_INT_FLAG=Q_INT_FLAG,
     W_INT_FLAG=W_INT_FLAG,
+    w01=waist_um*1e-6,
+    w02=waist_um*1e-6,
     om_hz=5e6,
     n=n
 )

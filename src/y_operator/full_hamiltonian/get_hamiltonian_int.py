@@ -63,9 +63,8 @@ def get_HB(params: YOperatorDerived):
         HB_int += np.kron(Wz_int, (np.kron(np.eye(params.n), Wz_mot)))
 
     if params.eff_dict["vdW"]:
-        # TODO: include minus sign elsewhere
         vdW_int = get_vdW(params)
-        vdW_mot = np.kron(get_vdW_mot(params), np.eye(params.n))
-        HB_int -= np.kron(vdW_int, vdW_mot)
+        vdW_mot = np.kron(np.eye(params.n), get_vdW_mot(params))
+        HB_int -= np.kron(vdW_int, vdW_mot)  # The blockade gradient depends on z_A - z_B.
 
     return HB_int

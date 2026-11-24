@@ -11,19 +11,21 @@ from dataclasses import replace
 
 
 # calculation parameters
-T_muK = 1.8
+T_muK = 1
 n = 250
-path = f'data/T{T_muK}/n{n}/'
+iterations = 200
+waist_um = 2
+
+path = f"data/w{waist_um:g}/T{T_muK}/n{n}/"
 os.makedirs(path, exist_ok=True)
 temperature = T_muK * 1e-6
-iterations = 100
 
-
-# configuration parameters
 cfg = YOperatorConfig(
     om_hz=5e6,
     delta_rydberg_hz=50e6,
-    n=n
+    w01=waist_um * 1e-6,
+    w02=waist_um * 1e-6,
+    n=n,
 )
 params = build_derived(cfg)
 print('Tau = ', params.tau / 1e-9, ' ns')
@@ -77,7 +79,7 @@ for i in tqdm(range(iterations)):
 
     density_matrix_diagonal = np.real(np.diag(rho_T0_A))
     fitted_temperature = fit_temperature(density_matrix_diagonal)
-    approximate_density_matrix = get_rho_T0(fitted_temperature, n)
+    approximate_density_matrix = get_rho_T0(params, fitted_temperature)
 
     density_matrix_diagonals[i] = density_matrix_diagonal
     fitted_temperatures.append(fitted_temperature)

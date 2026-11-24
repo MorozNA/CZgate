@@ -29,6 +29,7 @@ def get_H0(params: YOperatorDerived):
     use_deltaR = params.delta_rydberg is not None
 
     H = np.zeros((9, 9), dtype=complex)
+    H[7, 7] = -params.delta
     H[1:3, 1:3] = get_H_simple(params)
     H[3:5, 3:5] = get_H_simple(params)
 
